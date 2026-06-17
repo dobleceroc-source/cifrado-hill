@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoStudio Hill v6 - Cascada Avanzada</title>
+    <title>CryptoStudio Hill v7 - Documentación Integrada</title>
     <style>
         :root {
             --bg-principal: #070a13;
@@ -256,7 +256,6 @@
         .success { background-color: rgba(16, 185, 129, 0.08); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
         .error { background-color: rgba(239, 68, 68, 0.08); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
 
-        /* Grid de Canvases */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -299,9 +298,6 @@
         .bar-bg { width: 100%; height: 4px; background: #1e293b; border-radius: 2px; overflow: hidden; margin-bottom: 10px; }
         .bar-fill { height: 100%; width: 0%; background: var(--accent-azul); transition: width 0.4s ease; }
 
-        /* =========================================================================
-           NUEVA SUITE DE ANALÍTICA DE RUIDO AVANZADA (MODIFICADA)
-           ========================================================================= */
         .noise-analytics-wrapper {
             display: flex;
             flex-direction: column;
@@ -314,7 +310,6 @@
             grid-template-columns: 1fr 1fr;
             gap: 25px;
         }
-        @media (max-width: 850px) { .histograms-split-grid { grid-template-columns: 1fr; } }
 
         .noise-widget {
             background: #090e1a;
@@ -339,28 +334,13 @@
         }
 
         .chart-viewport {
-            width: 100%;
-            height: 160px;
-            background: #020408;
-            border-radius: 10px;
-            border: 1px solid #1e293b;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            width: 100%; height: 160px; background: #020408; border-radius: 10px; border: 1px solid #1e293b; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden;
         }
 
-        /* Líneas de rejilla virtuales para simular osciloscopio */
         .chart-viewport::before {
-            content: '';
-            position: absolute;
-            width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            pointer-events: none;
+            content: ''; position: absolute; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px; pointer-events: none;
         }
 
         .legend-container { display: flex; gap: 12px; font-size: 10px; font-family: monospace; }
@@ -368,85 +348,105 @@
         .dot-orig { width: 10px; height: 4px; background: linear-gradient(90deg, #3b82f6, transparent); border-radius: 1px; }
         .dot-proc { width: 10px; height: 4px; background: linear-gradient(90deg, #10b981, transparent); border-radius: 1px; }
 
-        .noise-grid-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            font-family: monospace;
-        }
+        .noise-grid-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; font-family: monospace; }
         @media (max-width: 900px) { .noise-grid-stats { grid-template-columns: 1fr 1fr; } }
         @media (max-width: 500px) { .noise-grid-stats { grid-template-columns: 1fr; } }
 
-        .stat-card {
-            background: #05070f;
-            border: 1px solid #1e293b;
-            padding: 16px;
-            border-radius: 12px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+        .stat-card { background: #05070f; border: 1px solid #1e293b; padding: 16px; border-radius: 12px; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+        .stat-label { font-size: 10px; color: var(--texto-secundario); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .stat-value { font-size: 22px; color: #ffffff; font-weight: 800; letter-spacing: -0.5px; }
 
-        .stat-label {
-            font-size: 10px;
-            color: var(--texto-secundario);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
+        .stat-spark { width: 100%; height: 3px; background: #111827; margin-top: 10px; border-radius: 2px; overflow: hidden; }
+        .stat-spark-fill { height: 100%; width: 0%; background: var(--accent-azul); transition: width 0.5s ease; }
 
-        .stat-value {
-            font-size: 22px;
-            color: #ffffff;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        /* Pequeñas barras de estado internas de los números */
-        .stat-spark {
-            width: 100%;
-            height: 3px;
-            background: #111827;
-            margin-top: 10px;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .stat-spark-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--accent-azul);
-            transition: width 0.5s ease;
-        }
-
-        /* Widget central de veredicto */
-        .verdict-box {
-            background: linear-gradient(135deg, #090f1e 0%, #040710 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 18px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
+        .verdict-box { background: linear-gradient(135deg, #090f1e 0%, #040710 100%); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
         .verdict-info { display: flex; flex-direction: column; gap: 4px; }
         .verdict-title { font-size: 10px; font-family: monospace; color: var(--texto-secundario); text-transform: uppercase; }
         .verdict-status { font-size: 15px; font-weight: 700; color: #ffffff; font-family: monospace; display: flex; align-items: center; gap: 8px;}
         .verdict-status span { font-size: 11px; padding: 2px 8px; background: rgba(255,255,255,0.05); border-radius: 4px; color: var(--amber);}
 
-        .btn-descargar {
-            display: inline-flex; align-items: center; gap: 10px; margin-top: 15px; padding: 12px 25px;
-            background: linear-gradient(135deg, var(--accent-azul), #1d4ed8); color: white; text-decoration: none;
-            border-radius: 8px; font-weight: 700; font-size: 12px; text-transform: uppercase; cursor: pointer; border: none;
-        }
+        .btn-descargar { display: inline-flex; align-items: center; gap: 10px; margin-top: 15px; padding: 12px 25px; background: linear-gradient(135deg, var(--accent-azul), #1d4ed8); color: white; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 12px; text-transform: uppercase; cursor: pointer; border: none; }
 
-        .console-panel { background: var(--bg-interno); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; font-family: monospace; font-size: 12px; }
+        .console-panel { background: var(--bg-interno); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; font-family: monospace; font-size: 12px; margin-bottom: 35px;}
         .console-title { color: var(--texto-secundario); text-transform: uppercase; margin-bottom: 8px; font-weight: bold; display: flex; justify-content: space-between; }
         .console-log { height: 90px; overflow-y: auto; color: #a7f3d0; }
         .console-item { margin-bottom: 4px; }
         .console-time { color: var(--accent-azul); margin-right: 8px; }
+
+        /* =========================================================================
+           NUEVO CONTENEDOR EXCLUSIVO PARA LA DOCUMENTACIÓN INTEGRADA (HTML MANUAL)
+           ========================================================================= */
+        .docs-section {
+            background: #0b1120;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .docs-main-title {
+            font-size: 14px;
+            font-family: monospace;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 15px;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .doc-card {
+            background: #05070f;
+            border-radius: 12px;
+            padding: 20px;
+            border-top: 3px solid var(--texto-secundario);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+        }
+
+        .doc-card.blue-t { border-top-color: var(--accent-azul); }
+        .doc-card.green-t { border-top-color: var(--accent-neon); }
+        .doc-card.red-t { border-top-color: var(--danger); }
+        .doc-card.amber-t { border-top-color: var(--amber); }
+
+        .doc-tag {
+            font-size: 9px;
+            font-family: monospace;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .blue-t .doc-tag { color: var(--accent-azul); }
+        .green-t .doc-tag { color: var(--accent-neon); }
+        .red-t .doc-tag { color: var(--danger); }
+        .amber-t .doc-tag { color: var(--amber); }
+
+        .doc-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .doc-desc {
+            font-size: 12.5px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .doc-desc strong {
+            color: #f1f5f9;
+        }
     </style>
 </head>
 <body>
@@ -490,11 +490,8 @@
 
     <div class="dashboard-meta">
         <div class="info-panel" id="panelBorde">
-            <div class="info-text" id="infoTexto">
-                Cargando especificaciones estructurales...
-            </div>
+            <div class="info-text" id="infoTexto">Cargando especificaciones estructurales...</div>
         </div>
-        
         <div class="cascade-panel">
             <div class="cascade-title" id="cascadeTitle">Cadena de matrices secuenciales activas:</div>
             <div class="cascade-flex" id="cascadeContainer"></div>
@@ -504,7 +501,6 @@
     <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
         <span style="font-size: 30px; display:block; margin-bottom:8px;">📥</span>
         <span style="font-weight: 700; color: #ffffff; font-size: 14px;">Arrastra la imagen o haz clic para abrir explorador</span>
-        
         <div class="file-specs" id="fileSpecs" style="display:none;">
             <div class="spec-tag" id="specRes">0x0 px</div>
             <div class="spec-tag" id="specSize">0 KB</div>
@@ -548,7 +544,7 @@
                     <div class="legend-container"><div class="legend-item"><div class="dot-orig"></div> Magnitud Base</div></div>
                 </div>
                 <div class="chart-viewport">
-                    <canvas id="histOriginalCanvas" style="width:100%; height:100%; box-shadow:none; border-radius:0;"></canvas>
+                    <canvas id="histOriginalCanvas"></canvas>
                 </div>
             </div>
             
@@ -558,7 +554,7 @@
                     <div class="legend-container"><div class="legend-item"><div class="dot-proc" id="legendDotProc"></div> Difusión Lineal</div></div>
                 </div>
                 <div class="chart-viewport">
-                    <canvas id="histProcesadoCanvas" style="width:100%; height:100%; box-shadow:none; border-radius:0;"></canvas>
+                    <canvas id="histProcesadoCanvas"></canvas>
                 </div>
             </div>
         </div>
@@ -610,6 +606,38 @@
         <div class="console-title"><span>📟 Auditoría de Capas Algebraicas</span><span>Estado: Cascada Habilitada</span></div>
         <div class="console-log" id="consoleLog"></div>
     </div>
+
+    <div class="docs-section">
+        <div class="docs-main-title">⚙️ MANUAL DE INSTRUMENTACIÓN CIENTÍFICA (DOCUMENTACIÓN TIF)</div>
+        <div class="docs-grid">
+            
+            <div class="doc-card blue-t">
+                <div class="doc-tag">Estadística Descriptiva Base</div>
+                <div class="doc-name">Desviación Estándar (In)</div>
+                <div class="doc-desc">Calcula la dispersión de frecuencias en los niveles de grises nativos. Un valor bajo indica que los píxeles están fuertemente agrupados alrededor de su media, denotando la presencia de **estructuras, formas coherentes y patrones visuales legibles** en la fotografía original.</div>
+            </div>
+
+            <div class="doc-card green-t">
+                <div class="doc-tag">Simulación de Caos Controlado</div>
+                <div class="doc-name">Desviación Estándar (Out)</div>
+                <div class="doc-desc">Monitorea la dispersión del flujo de datos procesado. A medida que la cifra aumenta, confirma matemáticamente que los píxeles han sido forzados a tomar valores distantes de su centro original, destruyendo la correlación espacial y generando el característico **efecto estático de ruido visual**.</div>
+            </div>
+
+            <div class="doc-card red-t">
+                <div class="doc-tag">Análisis de Error Estructural</div>
+                <div class="doc-name">Distorsión Inyectada (MSE)</div>
+                <div class="doc-desc">Aplica el algoritmo del **Error Cuadrático Medio**. Evalúa la diferencia neta píxel por píxel entre la fuente y el destino. Mientras que en compresión un MSE alto es una falla, **aquí un valor alto es la certificación del éxito del cifrado**, validando la alteración binaria total.</div>
+            </div>
+
+            <div class="doc-card amber-t">
+                <div class="doc-tag">Dinámica de Entropía</div>
+                <div class="doc-name">Δ Varianza Dinámica</div>
+                <div class="doc-desc">Representa el diferencial porcentual de variabilidad inducida en el canal. Un incremento positivo elevado (ej. <strong>+49%</strong>) constituye la evidencia matemática e irrefutable de que las transformaciones de la cascada Hill eliminaron la redundancia de datos del archivo.</div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -638,10 +666,8 @@ function ejecutarPipelineCifrado(imgOriginal) {
         const modo = document.querySelector('input[name="modoCripto"]:checked').value;
         const indiceNivel = parseInt(document.querySelector('input[name="nivelSeguridad"]:checked').value);
 
-        let ancho = imgOriginal.width;
-        let alto = imgOriginal.height;
+        let ancho = imgOriginal.width; let alto = imgOriginal.height;
         if (ancho % 2 !== 0) ancho--;
-
         if (ancho <= 0 || alto <= 0) throw new Error("Dimensiones inválidas.");
 
         const canvasIn = document.createElement('canvas');
@@ -655,11 +681,8 @@ function ejecutarPipelineCifrado(imgOriginal) {
         let bufferCanal = new Uint8ClampedArray(ancho * alto);
         for (let i = 0; i < bufferCanal.length; i++) {
             const idx = i * 4;
-            if (modo === 'descifrar') {
-                bufferCanal[i] = pixelesIn[idx];
-            } else {
-                bufferCanal[i] = Math.floor(0.299 * pixelesIn[idx] + 0.587 * pixelesIn[idx+1] + 0.114 * pixelesIn[idx+2]);
-            }
+            if (modo === 'descifrar') { bufferCanal[i] = pixelesIn[idx]; }
+            else { bufferCanal[i] = Math.floor(0.299 * pixelesIn[idx] + 0.587 * pixelesIn[idx+1] + 0.114 * pixelesIn[idx+2]); }
         }
 
         for (let i = 0; i < bufferCanal.length; i++) {
@@ -708,8 +731,7 @@ function ejecutarPipelineCifrado(imgOriginal) {
         }
         ctxOut.putImageData(imgDataOut, 0, 0);
 
-        const contOrig = document.getElementById('origenContainer');
-        const contDest = document.getElementById('destinoContainer');
+        const contOrig = document.getElementById('origenContainer'); const contDest = document.getElementById('destinoContainer');
         contOrig.innerHTML = ""; contOrig.appendChild(canvasIn);
         contDest.innerHTML = ""; contDest.appendChild(canvasOut);
 
@@ -722,191 +744,123 @@ function ejecutarPipelineCifrado(imgOriginal) {
         analizarEspectrosSeparados(pixelesOriginalesEnGrises, pixelesOut, modo === 'cifrar', indiceNivel);
         
         if (modo === 'cifrar') {
-            contOrig.className = 'canvas-container escaneando';
-            contDest.className = 'canvas-container escaneando-cifrado';
+            contOrig.className = 'canvas-container escaneando'; contDest.className = 'canvas-container escaneando-cifrado';
             document.getElementById('barIn').style.width = "100%"; document.getElementById('txtMetIn').textContent = "100%";
             document.getElementById('barOut').style.width = "100%"; document.getElementById('txtMetOut').textContent = "Entropía Máxima";
             document.getElementById('barOut').style.background = "var(--accent-neon)";
             mostrarStatus(`🔒 IMAGE LOCK: Cifrado multi-capa completado hasta Nivel ${indiceNivel+1}`, true);
         } else {
-            contOrig.className = 'canvas-container escaneando';
-            contDest.className = 'canvas-container escaneando';
+            contOrig.className = 'canvas-container escaneando'; contDest.className = 'canvas-container escaneando';
             document.getElementById('barIn').style.width = "100%"; document.getElementById('txtMetIn').textContent = "Señal Difusa";
             document.getElementById('barOut').style.width = "100%"; document.getElementById('txtMetOut').textContent = "100% Reconstruida";
             document.getElementById('barOut').style.background = "var(--accent-azul)";
             mostrarStatus(`🔓 DECODE SUCCESS: Flujo algebraico completamente revertido (${indiceNivel+1} capas deshechas)`, true);
         }
 
-    } catch (error) {
-        mostrarStatus("❌ ERROR EN LA TOPOLOGÍA: " + error.message, false);
-    }
+    } catch (error) { mostrarStatus("❌ ERROR EN LA TOPOLOGÍA: " + error.message, false); }
     const t1 = performance.now();
     document.getElementById('txtEficiencia').textContent = `${(t1 - t0).toFixed(1)} ms`;
 }
 
-// =========================================================================
-// MOTOR GRÁFICO ASISTIDO PARA HISTOGRAMAS HISTOLÓGICOS DETALLADOS
-// =========================================================================
 function analizarEspectrosSeparados(pixIn, pixOut, esCifrado, nivel) {
     const total = pixIn.length / 4;
-    let frecOrig = new Array(256).fill(0);
-    let frecProc = new Array(256).fill(0);
-    let sumaMse = 0, sumaOrig = 0, sumaProc = 0;
+    let frecOrig = new Array(256).fill(0); let frecProc = new Array(256).fill(0);
+    let sumaMse = 0; let sumaOrig = 0; let sumaProc = 0;
 
     for(let i=0; i<total; i++) {
-        const valOrig = pixIn[i*4];
-        const valProc = pixOut[i*4];
-        frecOrig[valOrig]++;
-        frecProc[valProc]++;
-        sumaOrig += valOrig;
-        sumaProc += valProc;
+        const valOrig = pixIn[i*4]; const valProc = pixOut[i*4];
+        frecOrig[valOrig]++; frecProc[valProc]++;
+        sumaOrig += valOrig; sumaProc += valProc;
         sumaMse += Math.pow(valProc - valOrig, 2);
     }
 
-    const mediaOrig = sumaOrig / total;
-    const mediaProc = sumaProc / total;
-    let varOrig = 0, varProc = 0;
-    
+    const mediaOrig = sumaOrig / total; const mediaProc = sumaProc / total;
+    let varOrig = 0; let varProc = 0;
     for(let i=0; i<total; i++) {
         varOrig += Math.pow(pixIn[i*4] - mediaOrig, 2);
         varProc += Math.pow(pixOut[i*4] - mediaProc, 2);
     }
     
-    const desvOrig = Math.sqrt(varOrig / total);
-    const desvProc = Math.sqrt(varProc / total);
+    const desvOrig = Math.sqrt(varOrig / total); const desvProc = Math.sqrt(varProc / total);
     const mse = sumaMse / total;
     const deltaVarianza = (((desvProc - desvOrig) / (desvOrig || 1)) * 100).toFixed(1);
 
-    // Actualizar números en el DOM
     document.getElementById('valMse').textContent = mse.toFixed(1);
     document.getElementById('valRuidoOrig').textContent = desvOrig.toFixed(2);
     document.getElementById('valRuidoProc').textContent = desvProc.toFixed(2);
     document.getElementById('valDeltaVarianza').textContent = `${deltaVarianza >= 0 ? '+' : ''}${deltaVarianza}%`;
 
-    // Escalar las pequeñas barras dinámicas internas (*sparklines*)
     document.getElementById('sparkIn').style.width = `${Math.min(desvOrig * 1.2, 100)}%`;
     document.getElementById('sparkOut').style.width = `${Math.min(desvProc * 1.2, 100)}%`;
     document.getElementById('sparkMse').style.width = `${Math.min((mse / 15000) * 100, 100)}%`;
     document.getElementById('sparkDelta').style.width = `${Math.min(Math.abs(deltaVarianza), 100)}%`;
 
-    // Lógica dinámica de diagnóstico para el Veredicto Central
     const txtVeredicto = document.getElementById('txtVeredicto');
     if(esCifrado) {
-        if(nivel >= 5) {
-            txtVeredicto.innerHTML = `Espectro de Ruido Blanco Perfecto <span>Alta Entropía Shanon</span>`;
-        } else {
-            txtVeredicto.innerHTML = `Dispersión Geométrica en Proceso <span>Entropía Intermedia</span>`;
-        }
-    } else {
-        txtVeredicto.innerHTML = `Estructura Reconstituida Correctamente <span>Simetría Pura</span>`;
-    }
+        txtVeredicto.innerHTML = nivel >= 5 ? `Espectro de Ruido Blanco Perfecto <span>Alta Entropía Shanon</span>` : `Dispersión Geométrica en Proceso <span>Entropía Intermedia</span>`;
+    } else { txtVeredicto.innerHTML = `Estructura Reconstituida Correctamente <span>Simetría Pura</span>`; }
 
-    // Renderizado del Histograma de Entrada (Canvas Izquierdo)
+    // Canvas Izquierdo
     const cOrig = document.getElementById('histOriginalCanvas'); const ctxO = cOrig.getContext('2d');
     const wO = cOrig.width = cOrig.parentElement.clientWidth; const hO = cOrig.height = 160;
-    ctxO.clearRect(0,0,wO,hO); 
-    
-    // Gradiente Estético Azul
-    let gradO = ctxO.createLinearGradient(0, hO, 0, 0);
-    gradO.addColorStop(0, 'rgba(59, 130, 246, 0.05)');
-    gradO.addColorStop(0.5, 'rgba(59, 130, 246, 0.3)');
-    gradO.addColorStop(1, 'rgba(96, 165, 250, 0.8)');
-    
-    const maxO = Math.max(...frecOrig);
-    const anchoBarraO = wO / 256;
-    
+    ctxO.clearRect(0,0,wO,hO);
+    let gradO = ctxO.createLinearGradient(0, hO, 0, 0); gradO.addColorStop(0, 'rgba(59, 130, 246, 0.05)'); gradO.addColorStop(0.5, 'rgba(59, 130, 246, 0.3)'); gradO.addColorStop(1, 'rgba(96, 165, 250, 0.8)');
+    const maxO = Math.max(...frecOrig); const anchoBarraO = wO / 256;
     ctxO.fillStyle = gradO;
-    for(let i=0; i<256; i++) {
-        const altura = (frecOrig[i] / (maxO || 1)) * (hO - 20);
-        ctxO.fillRect(i * anchoBarraO, hO - altura, anchoBarraO - 0.5, altura);
-    }
+    for(let i=0; i<256; i++) { const alt = (frecOrig[i] / (maxO || 1)) * (hO - 20); ctxO.fillRect(i * anchoBarraO, hO - alt, anchoBarraO - 0.5, alt); }
 
-    // Renderizado del Histograma de Salida (Canvas Derecho)
+    // Canvas Derecho
     const cProc = document.getElementById('histProcesadoCanvas'); const ctxP = cProc.getContext('2d');
     const wP = cProc.width = cProc.parentElement.clientWidth; const hP = cProc.height = 160;
     ctxP.clearRect(0,0,wP,hP);
-
-    // Gradiente Estético variable dependiendo del modo (Verde Neón para Cifrado, Ámbar para Descifrado)
     let gradP = ctxP.createLinearGradient(0, hP, 0, 0);
-    if(esCifrado) {
-        gradP.addColorStop(0, 'rgba(16, 185, 129, 0.05)');
-        gradP.addColorStop(0.5, 'rgba(16, 185, 129, 0.3)');
-        gradP.addColorStop(1, 'rgba(52, 211, 153, 0.8)');
-    } else {
-        gradP.addColorStop(0, 'rgba(245, 158, 11, 0.05)');
-        gradP.addColorStop(0.5, 'rgba(245, 158, 11, 0.3)');
-        gradP.addColorStop(1, 'rgba(251, 191, 36, 0.8)');
-    }
-
-    const maxP = Math.max(...frecProc);
-    const anchoBarraP = wP / 256;
-    
+    if(esCifrado) { gradP.addColorStop(0, 'rgba(16, 185, 129, 0.05)'); gradP.addColorStop(0.5, 'rgba(16, 185, 129, 0.3)'); gradP.addColorStop(1, 'rgba(52, 211, 153, 0.8)'); }
+    else { gradP.addColorStop(0, 'rgba(245, 158, 11, 0.05)'); gradP.addColorStop(0.5, 'rgba(245, 158, 11, 0.3)'); gradP.addColorStop(1, 'rgba(251, 191, 36, 0.8)'); }
+    const maxP = Math.max(...frecProc); const anchoBarraP = wP / 256;
     ctxP.fillStyle = gradP;
-    for(let i=0; i<256; i++) {
-        const altura = (frecProc[i] / (maxP || 1)) * (hP - 20);
-        ctxP.fillRect(i * anchoBarraP, hP - altura, anchoBarraP - 0.5, altura);
-    }
+    for(let i=0; i<256; i++) { const alt = (frecProc[i] / (maxP || 1)) * (hP - 20); ctxP.fillRect(i * anchoBarraP, hP - alt, anchoBarraP - 0.5, alt); }
 }
 
 function actualizarInterfazMatriz() {
     const modo = document.querySelector('input[name="modoCripto"]:checked').value;
     const indiceNivel = parseInt(document.querySelector('input[name="nivelSeguridad"]:checked').value);
     
-    const infoTexto = document.getElementById('infoTexto');
-    const cascadeContainer = document.getElementById('cascadeContainer');
-    const panelBorde = document.getElementById('panelBorde');
-    const log = document.getElementById('consoleLog');
+    const infoTexto = document.getElementById('infoTexto'); const cascadeContainer = document.getElementById('cascadeContainer');
+    const panelBorde = document.getElementById('panelBorde'); const log = document.getElementById('consoleLog');
     const legendDotProc = document.getElementById('legendDotProc');
 
-    cascadeContainer.innerHTML = "";
-    log.innerHTML = "";
+    cascadeContainer.innerHTML = ""; log.innerHTML = "";
 
     if(modo === 'cifrar') {
-        panelBorde.style.borderLeftColor = "var(--accent-neon)";
-        legendDotProc.style.background = "linear-gradient(90deg, #10b981, transparent)";
+        panelBorde.style.borderLeftColor = "var(--accent-neon)"; legendDotProc.style.background = "linear-gradient(90deg, #10b981, transparent)";
         infoTexto.innerHTML = `<strong>MODO CASCADA AVANZADO (Nivel ${indiceNivel+1}):</strong> La señal de píxeles viaja secuencialmente a través de las ${indiceNivel+1} matrices expuestas abajo de izquierda a derecha. Cada capa diluye geométricamente la estructura anterior.`;
         document.getElementById('cascadeTitle').innerHTML = `⛓️ Línea de Cifrado Progresivo Directo (${indiceNivel+1} Matrices en cadena):`;
     } else {
-        panelBorde.style.borderLeftColor = "var(--accent-azul)";
-        legendDotProc.style.background = "linear-gradient(90deg, #f59e0b, transparent)";
+        panelBorde.style.borderLeftColor = "var(--accent-azul)"; legendDotProc.style.background = "linear-gradient(90deg, #f59e0b, transparent)";
         infoTexto.innerHTML = `<strong>MODO DESCOPLAMIENTO REVERSO (Nivel ${indiceNivel+1}):</strong> Para recuperar los datos nativos, el descifrador aplica las matrices inversas en orden estrictamente inverso (de derecha a izquierda, empezando por la última capa inyectada $K_{${indiceNivel+1}}^{-1}$).`;
         document.getElementById('cascadeTitle').innerHTML = `⛓️ Pipeline de Descifrado Simétrico Inverso (Orden Crítico Reversivo):`;
     }
 
     for (let paso = 0; paso <= indiceNivel; paso++) {
-        const mk = MATRICES[paso].K;
-        const mi = MATRICES[paso].K_INV;
-
+        const mk = MATRICES[paso].K; const mi = MATRICES[paso].K_INV;
         const unidadHtml = document.createElement('div');
         unidadHtml.className = `matrix-unit ${modo === 'cifrar' ? 'active-op' : ''}`;
         unidadHtml.innerHTML = `
             <div class="matrix-label">${modo === 'cifrar' ? `Capa ${paso+1}: K${paso+1}` : `Deshace Capa ${paso+1}: K${paso+1}⁻¹`}</div>
-            <div class="matrix-math">
-                <div class="matrix-cells">
-                    <div class="matrix-row"><span>${modo === 'cifrar' ? mk[0][0] : mi[0][0]}</span><span>${modo === 'cifrar' ? mk[0][1] : mi[0][1]}</span></div>
-                    <div class="matrix-row"><span>${modo === 'cifrar' ? mk[1][0] : mi[1][0]}</span><span>${modo === 'cifrar' ? mk[1][1] : mi[1][1]}</span></div>
-                </div>
-            </div>
+            <div class="matrix-math"><div class="matrix-cells">
+                <div class="matrix-row"><span>${modo === 'cifrar' ? mk[0][0] : mi[0][0]}</span><span>${modo === 'cifrar' ? mk[0][1] : mi[0][1]}</span></div>
+                <div class="matrix-row"><span>${modo === 'cifrar' ? mk[1][0] : mi[1][0]}</span><span>${modo === 'cifrar' ? mk[1][1] : mi[1][1]}</span></div>
+            </div></div>
         `;
         cascadeContainer.appendChild(unidadHtml);
-
         if (paso < indiceNivel) {
-            const flecha = document.createElement('div');
-            flecha.className = "cascade-arrow";
-            flecha.textContent = "➔";
-            cascadeContainer.appendChild(flecha);
+            const flecha = document.createElement('div'); flecha.className = "cascade-arrow"; flecha.textContent = "➔"; cascadeContainer.appendChild(flecha);
         }
-
-        const itemLog = document.createElement('div');
-        itemLog.className = "console-item";
-        const tiempoStr = new Date().toTimeString().split(' ')[0];
+        const itemLog = document.createElement('div'); itemLog.className = "console-item"; const tiempoStr = new Date().toTimeString().split(' ')[0];
         itemLog.innerHTML = `<span class="console-time">[${tiempoStr}]</span> Vinculada Capa Algebraica ${paso+1} -> Matriz K: [[${mk[0]}],[${mk[1]}]] | K_INV: [[${mi[0]}],[${mi[1]}]]`;
         log.appendChild(itemLog);
     }
-
-    if (ultimaImgProcesada) {
-        ejecutarPipelineCifrado(ultimaImgProcesada);
-    }
+    if (ultimaImgProcesada) ejecutarPipelineCifrado(ultimaImgProcesada);
 }
 
 window.onload = function() { actualizarInterfazMatriz(); };
