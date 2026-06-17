@@ -3,437 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ MATRIX CRYPTO SYNTH SYNAPSE v6.0 ⚡</title>
+    <title>📐 PURE HILL MATRIX ENGINE v7.0 📐</title>
     <style>
         :root {
-            --bg-base: #010103;
-            --bg-panel: #06060c;
-            --bg-interior: #020205;
-            --border-neon: #00ff66;
-            --border-cyber: #ff0055;
-            --cyber-blue: #00f3ff;
-            --cyber-yellow: #fefe00;
-            --text-main: #ffffff;
-            --text-dim: #4e5d78;
+            --bg-base: #020206;
+            --bg-panel: #090b15;
+            --bg-interior: #04050a;
+            --cyber-green: #00ff66;
+            --cyber-crimson: #ff0055;
+            --cyber-cyan: #00f3ff;
+            --cyber-amber: #ffaa00;
+            --text-white: #ffffff;
+            --text-dim: #4b5563;
         }
 
         body {
             font-family: 'Courier New', Courier, monospace;
             background-color: var(--bg-base);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
+            color: var(--text-white);
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
             background-image: 
-                radial-gradient(rgba(0, 255, 102, 0.15) 1px, transparent 0),
-                radial-gradient(rgba(255, 0, 85, 0.1) 1px, transparent 0);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
 
-        .cyber-grid-container {
-            width: 100%;
-            max-width: 1400px;
+        .main-container {
+            width: 100%; max-width: 1350px;
             background: var(--bg-panel);
-            border: 3px double var(--cyber-blue);
+            border: 2px solid var(--cyber-cyan);
             padding: 25px;
-            box-shadow: 0 0 40px rgba(0, 243, 255, 0.15), inset 0 0 20px rgba(0,0,0,0.9);
-            position: relative;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
             box-sizing: border-box;
-        }
-
-        /* Esquinas Sci-Fi decorativas */
-        .cyber-grid-container::before {
-            content: "CORE_ENG_V6.002";
-            position: absolute; top: 2px; left: 10px;
-            font-size: 9px; color: var(--border-neon);
+            position: relative;
         }
 
         header {
-            text-align: center;
-            border-bottom: 2px dashed var(--border-cyber);
-            padding-bottom: 15px;
-            margin-bottom: 25px;
+            text-align: center; border-bottom: 2px dashed var(--cyber-crimson);
+            padding-bottom: 15px; margin-bottom: 25px;
         }
 
         h1 {
-            margin: 0; font-size: 38px; font-weight: 900; letter-spacing: -1px;
-            text-transform: uppercase; color: #fff;
-            text-shadow: 2px 2px 0 var(--border-cyber), -2px -2px 0 var(--cyber-blue);
+            margin: 0; font-size: 32px; letter-spacing: -1px; text-transform: uppercase;
+            text-shadow: 0 0 10px var(--cyber-cyan);
         }
 
-        /* Layout de Tres Columnas del Futuro */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 320px 1fr 340px;
-            gap: 20px;
-            margin-bottom: 25px;
+        /* Arquitectura del Panel de Control */
+        .dashboard-layout {
+            display: grid; grid-template-columns: 340px 1fr 340px; gap: 20px; margin-bottom: 20px;
         }
 
-        @media (max-width: 1100px) {
-            .main-layout { grid-template-columns: 1fr; }
+        @media (max-width: 1150px) { .dashboard-layout { grid-template-columns: 1fr; } }
+
+        .module-rack {
+            background: var(--bg-interior); border: 1px solid var(--text-dim); padding: 15px;
+            display: flex; flex-direction: column; gap: 15px;
         }
 
-        .control-rack {
-            background: var(--bg-interior);
-            border: 1px solid var(--text-dim);
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .rack-title {
+        .module-title {
             font-size: 11px; font-weight: bold; letter-spacing: 2px;
-            color: var(--cyber-yellow); text-transform: uppercase;
-            border-bottom: 1px solid var(--text-dim); padding-bottom: 5px;
+            color: var(--cyber-amber); text-transform: uppercase;
+            border-bottom: 1px solid #1f2937; padding-bottom: 5px;
         }
 
-        /* Botonera Interactiva de Modos */
-        .btn-group-vertical { display: flex; flex-direction: column; gap: 8px; }
-        
-        .action-btn {
-            background: #000; color: var(--border-neon);
-            border: 1px solid var(--border-neon); padding: 12px;
-            font-family: monospace; font-weight: bold; font-size: 11px;
-            cursor: pointer; text-transform: uppercase; transition: all 0.2s;
-            text-align: left; position: relative;
+        /* Selectores de modo */
+        .btn-stack { display: flex; flex-direction: column; gap: 8px; }
+        .cyber-btn {
+            background: #000; color: var(--cyber-green); border: 1px solid var(--cyber-green);
+            padding: 12px; font-family: monospace; font-weight: bold; font-size: 11px;
+            cursor: pointer; text-transform: uppercase; transition: all 0.2s; text-align: left;
         }
-        .action-btn:hover {
-            background: var(--border-neon); color: #000;
-            box-shadow: 0 0 15px var(--border-neon);
-        }
-        .action-btn.active {
-            background: var(--border-cyber); color: #fff; border-color: var(--border-cyber);
-            box-shadow: 0 0 15px var(--border-cyber);
-        }
-        
-        .action-btn.trigger { border-color: var(--cyber-blue); color: var(--cyber-blue); }
-        .action-btn.trigger:hover { background: var(--cyber-blue); color: #000; }
+        .cyber-btn:hover { background: var(--cyber-green); color: #000; box-shadow: 0 0 10px var(--cyber-green); }
+        .cyber-btn.active { background: var(--cyber-crimson); color: #fff; border-color: var(--cyber-crimson); box-shadow: 0 0 15px var(--cyber-crimson); }
+        .cyber-btn.util { border-color: var(--cyber-cyan); color: var(--cyber-cyan); }
+        .cyber-btn.util:hover { background: var(--cyber-cyan); color: #000; }
 
-        .action-btn.panic { border-color: var(--border-cyber); color: var(--border-cyber); }
-        .action-btn.panic:hover { background: var(--border-cyber); color: #fff; }
-
-        /* PAD VECTORIAL X/Y INTERACTIVO (Arrastrar ratón) */
-        .vector-pad-container {
-            position: relative; width: 100%; height: 160px;
-            background: #000; border: 1px solid var(--cyber-blue);
-            cursor: crosshair; overflow: hidden;
+        /* Monitor Algebraico */
+        .matrix-monitor {
+            background: #000; border: 1px solid #1f2937; padding: 12px;
+            display: flex; flex-direction: column; gap: 8px; font-size: 12px;
         }
-        .vector-pad-grid {
+        .matrix-row { display: flex; justify-content: center; gap: 15px; font-size: 18px; color: var(--cyber-green); font-weight: bold; }
+        .math-info { font-size: 10px; color: var(--text-dim); display: flex; justify-content: space-between; }
+
+        /* INTERACTION PAD VECTORIAL X/Y */
+        .space-pad {
+            width: 100%; height: 180px; background: #000; border: 1px solid var(--cyber-cyan);
+            position: relative; cursor: crosshair; overflow: hidden;
+        }
+        .space-pad-mesh {
             position: absolute; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0,243,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(0,243,255,0.07) 1px, transparent 1px);
-            background-size: 10px 10px;
+            background-image: linear-gradient(rgba(0,243,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,243,255,0.05) 1px, transparent 1px);
+            background-size: 15px 15px;
         }
-        .vector-dot {
-            position: absolute; width: 10px; height: 10px; background: var(--border-cyber);
-            border-radius: 50%; box-shadow: 0 0 10px var(--border-cyber);
-            top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;
-        }
-        .vector-readout {
-            position: absolute; bottom: 5px; left: 5px; font-size: 9px;
-            color: var(--cyber-blue); font-weight: bold; background: rgba(0,0,0,0.7); padding: 2px 5px;
+        .space-pointer {
+            position: absolute; width: 8px; height: 8px; background: var(--cyber-crimson);
+            border-radius: 50%; box-shadow: 0 0 10px var(--cyber-crimson);
+            top: 40%; left: 30%; transform: translate(-50%, -50%); pointer-events: none;
         }
 
-        /* SECTORES DEL SECUENCIADOR RÍTMICO DE MATRIZ */
-        .step-matrix-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+        /* Viewports Centrales */
+        .viewport-center { display: flex; flex-direction: column; gap: 20px; }
+        
+        .dropzone-area {
+            border: 2px dashed var(--cyber-cyan); background: rgba(0,243,255,0.01);
+            padding: 20px; text-align: center; cursor: pointer; font-size: 12px;
         }
-        .step-node {
-            height: 40px; background: #111424; border: 1px solid #222b45;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 10px; font-weight: bold; color: var(--text-dim); transition: all 0.2s;
-        }
-        .step-node:hover { border-color: var(--cyber-blue); color: #fff; }
-        .step-node.active {
-            background: var(--border-neon); color: #000; border-color: #fff;
-            box-shadow: 0 0 10px var(--border-neon);
-        }
+        .dropzone-area:hover { border-color: var(--cyber-green); background: rgba(0,255,102,0.02); }
 
-        /* Zona de Visualización Central (Canvases) */
-        .display-core {
-            display: flex; flex-direction: column; gap: 20px;
-        }
+        .view-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .view-grid { grid-template-columns: 1fr; } }
 
-        .canvas-rack {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        .view-box {
+            background: #000; border: 1px solid #1f2937; padding: 12px;
+            display: flex; flex-direction: column; align-items: center;
         }
-        @media (max-width: 768px) { .canvas-rack { grid-template-columns: 1fr; } }
+        .view-label { font-size: 10px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; width: 100%; }
 
-        .viewport-box {
-            background: #020204; border: 1px solid var(--text-dim);
-            padding: 15px; display: flex; flex-direction: column; align-items: center;
-            position: relative;
+        .canvas-container {
+            width: 100%; min-height: 280px; display: flex; align-items: center; justify-content: center;
+            background: #030303; position: relative;
         }
-        .viewport-box::before {
-            content: "LIVE_STREAM"; position: absolute; top: 4px; right: 8px; font-size: 8px; color: var(--text-dim);
-        }
+        canvas { max-width: 100%; max-height: 320px; border: 1px solid #111; }
 
-        .canvas-frame {
-            width: 100%; min-height: 320px; background: #000;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid rgba(255,255,255,0.03); position: relative;
-            box-shadow: inset 0 0 30px rgba(0,0,0,1);
-        }
-        .canvas-frame::after {
-            content: ""; position: absolute; top:0; left:0; width:100%; height:100%;
-            background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.25) 50%); background-size: 100% 4px;
-            pointer-events: none; z-index: 5;
-        }
-
-        canvas { max-width: 100%; max-height: 350px; object-fit: contain; image-rendering: pixelated; }
-
-        /* Módulos de carga drag-drop */
-        .interact-dropzone {
-            border: 2px dashed #ff0055; background: rgba(255,0,85,0.02);
-            padding: 25px; text-align: center; cursor: pointer; transition: all 0.2s;
-        }
-        .interact-dropzone:hover { background: rgba(0,243,255,0.04); border-color: var(--cyber-blue); }
-
-        /* Estructuras de osciloscopio de barras laterales */
-        .spectrum-container { display: flex; flex-direction: column; gap: 10px; }
-        .spectrum-node { display: flex; flex-direction: column; gap: 4px; }
-        .spectrum-label { font-size: 10px; color: var(--text-dim); display: flex; justify-content: space-between; }
-        .spectrum-bar-bg { width: 100%; height: 12px; background: #0b0e14; border: 1px solid #1a2333; position: relative; overflow: hidden; }
-        .spectrum-bar-fill { height: 100%; width: 50%; background: linear-gradient(90deg, var(--cyber-blue), var(--border-neon)); transition: width 0.1s ease; }
-
-        /* Consola de comandos e hilos */
+        /* Consola de Auditoría Modular e Indicadores */
         .footer-terminal {
-            display: grid; grid-template-columns: 1fr 280px; gap: 20px; background: #000;
-            border: 1px solid var(--text-dim); padding: 15px; box-sizing: border-box;
+            background: #000; border: 1px solid var(--text-dim); padding: 15px;
+            font-size: 11px; display: grid; grid-template-columns: 1fr 300px; gap: 20px;
         }
         @media (max-width: 800px) { .footer-terminal { grid-template-columns: 1fr; } }
+        
+        .log-box { height: 90px; overflow-y: auto; color: var(--cyber-green); line-height: 1.5; }
+        .log-row { display: flex; gap: 10px; }
+        .log-stamp { color: var(--cyber-crimson); }
 
-        .log-stream { height: 100px; overflow-y: auto; font-size: 11px; color: var(--border-neon); line-height: 1.6; }
-        .log-item { display: flex; gap: 10px; }
-        .log-time { color: var(--border-cyber); }
-
-        /* Canvas de osciloscopio en tiempo real inferior */
-        .oscilloscope-canvas { background: #030705; border: 1px solid #132b1a; width: 100%; height: 100px; }
+        .telemetry-list { display: flex; flex-direction: column; gap: 8px; }
+        .telemetry-item { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); }
+        .telemetry-item span { color: #fff; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="cyber-grid-container">
+<div class="main-container">
     <header>
-        <h1>ALGEBRAIC MUTATION SYNAPSE</h1>
-        <div style="font-size: 10px; color: var(--cyber-blue); letter-spacing: 4px; margin-top:4px;">// MULTI-LAYER HILL CYPHER VECTOR ENGINE REALTIME SYSTEM</div>
+        <h1>📐 RIGID HILL CIPHER KERNEL 🧮</h1>
+        <div style="font-size: 10px; color: var(--cyber-cyan); letter-spacing: 3px; margin-top: 4px;">// MATRIZ DE TRANSFORMACIÓN LINEAL BIYECTIVA EN ESPACIO MODULAR ℤ₂₅₆</div>
     </header>
 
-    <div class="main-layout">
-        <div class="control-rack">
-            <div class="rack-title">🎛️ Pipeline Selector</div>
-            <div class="btn-group-vertical">
-                <button class="action-btn active" id="mode-cifrar" onclick="toggleCryptoMode('cifrar')">⚡ Inyectar Cifrado</button>
-                <button class="action-btn" id="mode-descifrar" onclick="toggleCryptoMode('descifrar')">🔄 Operación Inversa</button>
+    <div class="dashboard-layout">
+        <div class="module-rack">
+            <div class="module-title">⚙️ Pipeline Operational Mode</div>
+            <div class="btn-stack">
+                <button class="cyber-btn active" id="mode-encrypt" onclick="setOpMode('cifrar')">🔒 Cifrar Bloques (Vector * K)</button>
+                <button class="cyber-btn" id="mode-decrypt" onclick="setOpMode('descifrar')">🔓 Descifrar Bloques (Vector * K⁻¹)</button>
             </div>
 
-            <div class="rack-title">🧬 Vector Pad X/Y [Live Modifier]</div>
-            <div style="font-size:9px; color: var(--text-dim);">Haz clic y arrastra dentro del pad para alterar los coeficientes $K_{00}$ y $K_{01}$ al vuelo:</div>
-            <div class="vector-pad-container" id="vectorPad">
-                <div class="vector-pad-grid"></div>
-                <div class="vector-dot" id="vectorDot"></div>
-                <div class="vector-readout" id="vectorReadout">K00: 11 | K01: 8</div>
+            <div class="module-title">🎚️ Espacio Euclidiano X/Y Pad</div>
+            <div style="font-size: 9px; color: var(--text-dim);">Arrastra el cursor para alterar linealmente la base. El sistema buscará dinámicamente determinantes invertibles válidos:</div>
+            <div class="space-pad" id="spacePad">
+                <div class="space-pad-mesh"></div>
+                <div class="space-pointer" id="spacePointer"></div>
             </div>
 
-            <div class="rack-title">💥 Inyecciones de Pánico</div>
-            <div class="btn-group-vertical">
-                <button class="action-btn trigger" onclick="ejecutarMutacionSustancial()">🎲 Mutación Estocástica</button>
-                <button class="action-btn panic" onclick="activarSobrecargaModulada()">🔥 Overload Melt (Z256)</button>
-                <button class="action-btn trigger" onclick="restaurarValoresBase()">🔋 Reset Algorítmico</button>
+            <div class="btn-stack">
+                <button class="cyber-btn util" onclick="inyectarMatrizIdentidad()">🔋 Reset: Matriz Identidad</button>
             </div>
         </div>
 
-        <div class="display-core">
-            <div class="interact-dropzone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-                <span style="font-size: 18px; font-weight: bold; color: var(--cyber-blue);">📥 DEPOSIT DATA IMAGE FLUX</span>
-                <span style="display:block; font-size:10px; color: var(--text-dim); margin-top: 5px;">Suelte archivos PNG / JPG o haga clic para iniciar el pipeline matemático</span>
+        <div class="viewport-center">
+            <div class="dropzone-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                <span style="color: var(--cyber-cyan); font-weight: bold;">📥 MONTAR FLUJO BINARIO DE IMAGEN</span> (Arrastra o haz clic aquí)
                 <input type="file" id="fileInput" accept="image/*" style="display:none">
             </div>
 
-            <div class="canvas-rack">
-                <div class="viewport-box">
-                    <span class="rack-title" style="color:var(--cyber-blue)">📡 Input Vector Stream</span>
-                    <div class="canvas-frame" id="inputFrame">
-                        <span style="color:var(--text-dim); font-size:11px;">[WAITING_FOR_DATA_STREAM]</span>
+            <div class="view-grid">
+                <div class="view-box">
+                    <div class="view-label">📡 Vector Input Stream (P1, P2)</div>
+                    <div class="canvas-container" id="inputContainer">
+                        <span style="color: var(--text-dim);">[KERNEL_STANDBY]</span>
                     </div>
                 </div>
-                <div class="viewport-box">
-                    <span class="rack-title" style="color:var(--border-cyber)">🔮 Output Algebraic Modulo</span>
-                    <div class="canvas-frame" id="outputFrame">
-                        <span style="color:var(--text-dim); font-size:11px;">[PIPELINE_EMPTY]</span>
+                <div class="view-box">
+                    <div class="view-label">🔮 Modular Transformed Result</div>
+                    <div class="canvas-container" id="outputContainer">
+                        <span style="color: var(--text-dim);">[PIPELINE_EMPTY]</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="control-rack">
-            <div class="rack-title">🎹 Cripto-Sequencer Bits</div>
-            <div style="font-size:9px; color: var(--text-dim); margin-bottom:5px;">Activa/desactiva compuertas lógicas para alterar sub-bloques vectoriales:</div>
-            <div class="step-matrix-grid">
-                <div class="step-node active" onclick="toggleStep(this, 0)">B_01</div>
-                <div class="step-node" onclick="toggleStep(this, 1)">B_02</div>
-                <div class="step-node active" onclick="toggleStep(this, 2)">B_03</div>
-                <div class="step-node" onclick="toggleStep(this, 3)">B_04</div>
-                <div class="step-node" onclick="toggleStep(this, 4)">B_05</div>
-                <div class="step-node active" onclick="toggleStep(this, 5)">B_06</div>
-                <div class="step-node" onclick="toggleStep(this, 6)">B_07</div>
-                <div class="step-node active" onclick="toggleStep(this, 7)">B_08</div>
+        <div class="module-rack">
+            <div class="module-title">📊 Current Encryption Matrix (K)</div>
+            <div class="matrix-monitor">
+                <div class="matrix-row" id="k-row-0">[ 000 , 000 ]</div>
+                <div class="matrix-row" id="k-row-1">[ 000 , 000 ]</div>
+                <div class="math-info"><span>Determinante ℤ₂₅₆:</span><span id="math-det" style="color:var(--cyber-cyan)">0</span></div>
+                <div class="math-info"><span>¿Es Invertible?:</span><span id="math-inv" style="color:var(--cyber-green)">SÍ</span></div>
             </div>
 
-            <div class="rack-title">📊 Bus Telemetry Status</div>
-            <div class="spectrum-container">
-                <div class="spectrum-node">
-                    <div class="spectrum-label"><span>Entropía Matricial</span><span id="val-ent">45%</span></div>
-                    <div class="spectrum-bar-bg"><div class="spectrum-bar-fill" id="bar-ent" style="width: 45%;"></div></div>
-                </div>
-                <div class="spectrum-node">
-                    <div class="spectrum-label"><span>Stress del Kernel Algebraico</span><span id="val-str">12%</span></div>
-                    <div class="spectrum-bar-bg"><div class="spectrum-bar-fill" id="bar-str" style="width: 12%; background: var(--border-cyber);"></div></div>
-                </div>
-                <div class="spectrum-node">
-                    <div class="spectrum-label"><span>Saturación del Módulo $\mathbb{Z}_{256}$</span><span id="val-sat">88%</span></div>
-                    <div class="spectrum-bar-bg"><div class="spectrum-bar-fill" id="bar-sat" style="width: 88%; background: var(--cyber-yellow);"></div></div>
-                </div>
+            <div class="module-title">🔄 Decryption Inverse Matrix (K⁻¹)</div>
+            <div class="matrix-monitor">
+                <div class="matrix-row" id="kinv-row-0" style="color: var(--cyber-crimson)">[ 000 , 000 ]</div>
+                <div class="matrix-row" id="kinv-row-1" style="color: var(--cyber-crimson)">[ 000 , 000 ]</div>
+                <div class="math-info"><span>Inverso Det ℤ₂₅₆:</span><span id="math-invdet" style="color:var(--cyber-crimson)">0</span></div>
             </div>
         </div>
     </div>
 
     <div class="footer-terminal">
         <div>
-            <div class="rack-title" style="color:var(--border-neon); margin-bottom:5px;">📟 Realtime Modular Auditor Logs</div>
-            <div class="log-stream" id="logStream">
-                <div class="log-item"><span class="log-time">[00:00:00]</span> <span>Kernel cargado. Modo de arrastre del pad X/Y inicializado.</span></div>
+            <div class="module-title" style="color: var(--cyber-green); margin-bottom: 5px;">📟 Algebraic Engine Auditor Log</div>
+            <div class="log-box" id="logBox">
+                <div class="log-row"><span class="log-stamp">[00:00:00]</span> Engine iniciado. Esperando flujos vectoriales...</div>
             </div>
         </div>
         <div>
-            <div class="rack-title" style="color:var(--cyber-blue); margin-bottom:5px;">📈 Matrix Waveform</div>
-            <canvas id="oscCanvas" class="oscilloscope-canvas"></canvas>
+            <div class="module-title" style="color: var(--cyber-cyan); margin-bottom: 5px;">📊 Modular Telemetry</div>
+            <div class="telemetry-list">
+                <div class="telemetry-item">Espacio Modular: <span>ℤ₂₅₆ (Byte Oriented)</span></div>
+                <div class="telemetry-item">Dimensión de Bloque: <span>2 x 1 Vectors</span></div>
+                <div class="telemetry-item">Estructura Lineal: <span id="tel-status" style="color:var(--cyber-green)">BIYECTIVA PERFECTA</span></div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-// CONFIGURACIÓN GLOBAL DINÁMICA DE VALORES BASE
-let HillMatrix = { a: 11, b: 8, c: 3, d: 1 };
-let criptoModo = "cifrar";
-let imagenNucleo = null;
-let bitsSequencer = [true, false, true, false, false, true, false, true];
+// MATRIZ DE HILL GLOBAL BASE (Invertible por defecto en Z256)
+let K = { a: 11, b: 8, c: 3, d: 1 };
+let opMode = "cifrar";
+let coreImage = null;
 
 function mod256(n) {
     return ((n % 256) + 256) % 256;
 }
 
-// Cálculo dinámico de la Inversa de la Matriz Hill en espacio modular Z256
-function obtenerInversaZ256(m) {
-    let determinante = mod256(m.a * m.d - m.b * m.c);
-    let invDeterminante = 0;
+// Algoritmo extendido de Euclides para buscar inverso multiplicativo modular en Z256
+function calcularInversoDeterminante(det) {
+    det = mod256(det);
+    if (det % 2 === 0) return 0; // Si es par, no tiene inverso en Z256 (no coprimo)
     
-    // El determinante debe ser coprimo con 256 (básicamente, un número impar)
     for (let i = 1; i < 256; i += 2) {
-        if (mod256(determinante * i) === 1) {
-            invDeterminante = i;
-            break;
+        if (mod256(det * i) === 1) {
+            return i;
         }
     }
-    
-    if (invDeterminante === 0) return null; // No invertible en Z256
+    return 0;
+}
 
+// Evalúa y calcula la matriz inversa de Hill exacta sobre Z256
+function obtenerMatrizInversa(matrix) {
+    let det = mod256(matrix.a * matrix.d - matrix.b * matrix.c);
+    let invDet = calcularInversoDeterminante(det);
+    
+    if (invDet === 0) return null; // No es invertible
+
+    // Matriz de adjunta: [d, -b] y [-c, a] multiplicada por el inverso del determinante
     return {
-        a: mod256(m.d * invDeterminante),
-        b: mod256(-m.b * invDeterminante),
-        c: mod256(-m.c * invDeterminante),
-        d: mod256(m.a * invDeterminante)
+        a: mod256(matrix.d * invDet),
+        b: mod256(-matrix.b * invDet),
+        c: mod256(-matrix.c * invDet),
+        d: mod256(matrix.a * invDet)
     };
 }
 
-function toggleCryptoMode(modo) {
-    criptoModo = modo;
-    document.getElementById('mode-cifrar').classList.toggle('active', modo === 'cifrar');
-    document.getElementById('mode-descifrar').classList.toggle('active', modo === 'descifrar');
-    pushLog(`Modo conmutado a: [${modo.toUpperCase()}]`);
-    procesarFlujoCripto();
+function setOpMode(mode) {
+    opMode = mode;
+    document.getElementById('mode-encrypt').classList.toggle('active', mode === 'cifrar');
+    document.getElementById('mode-decrypt').classList.toggle('active', mode === 'descifrar');
+    pushAuditLog(`Operación conmutada a: [${mode.toUpperCase()}]`);
+    renderCriptoPipeline();
 }
 
-function toggleStep(elemento, index) {
-    elemento.classList.toggle('active');
-    bitsSequencer[index] = elemento.classList.contains('active');
-    pushLog(`Bit secuenciador Gate_${index} modificado.`);
-    procesarFlujoCripto();
+function inyectarMatrizIdentidad() {
+    K = { a: 1, b: 0, c: 0, d: 1 };
+    pushAuditLog("Bypass activado: Matriz cargada con la Identidad.");
+    actualizarMonitoresMatriciales();
+    renderCriptoPipeline();
 }
 
-// CONTROL X/Y MEDIANTE EL PAD INTERACTIVO CON EL RATÓN
-const vectorPad = document.getElementById('vectorPad');
-const vectorDot = document.getElementById('vectorDot');
-const vectorReadout = document.getElementById('vectorReadout');
+// CONTROL DE ENTRADA MEDIANTE EL PAD DE COORDENADAS INTERACTIVO
+const spacePad = document.getElementById('spacePad');
+const spacePointer = document.getElementById('spacePointer');
 
-function interactuarPad(e) {
-    const rect = vectorPad.getBoundingClientRect();
-    const x = Math.min(Math.max(0, e.clientX - rect.left), rect.width);
-    const y = Math.min(Math.max(0, e.clientY - rect.top), rect.height);
+function processPadMovement(e) {
+    const rect = spacePad.getBoundingClientRect();
+    const mouseX = Math.min(Math.max(0, e.clientX - rect.left), rect.width);
+    const mouseY = Math.min(Math.max(0, e.clientY - rect.top), rect.height);
 
-    vectorDot.style.left = `${x}px`;
-    vectorDot.style.top = `${y}px`;
+    // Mapear posiciones a coeficientes enteros intermedios
+    let testA = Math.floor((mouseX / rect.width) * 128) * 2 + 1; // Forzar impares parciales para acelerar coprimidad
+    let testB = Math.floor((mouseY / rect.height) * 255);
+    let testC = 3; // Mantener constantes de anclaje para asegurar que existan soluciones invertibles abundantes
+    let testD = 1;
 
-    // Mapear coordenadas de pixeles directamente a números enteros válidos
-    HillMatrix.a = Math.floor((x / rect.width) * 50) + 1;
-    HillMatrix.b = Math.floor((y / rect.height) * 50) + 1;
-
-    vectorReadout.textContent = `K00: ${HillMatrix.a} | K01: ${HillMatrix.b}`;
+    let det = mod256(testA * testD - testB * testC);
     
-    // Actualizar barras telemétricas estéticas en base al movimiento
-    document.getElementById('bar-str').style.width = `${Math.floor((x/rect.width)*100)}%`;
-    document.getElementById('val-str').textContent = `${Math.floor((x/rect.width)*100)}%`;
-
-    procesarFlujoCripto();
+    // Validar rigurosamente si la configuración del ratón produce un Cifrado de Hill válido
+    if (calcularInversoDeterminante(det) !== 0) {
+        K.a = testA;
+        K.b = testB;
+        K.c = testC;
+        K.d = testD;
+        
+        spacePointer.style.left = `${mouseX}px`;
+        spacePointer.style.top = `${mouseY}px`;
+        
+        actualizarMonitoresMatriciales();
+        renderCriptoPipeline();
+    }
 }
 
-vectorPad.addEventListener('mousedown', (e) => {
-    interactuarPad(e);
-    vectorPad.addEventListener('mousemove', interactuarPad);
+spacePad.addEventListener('mousedown', (e) => {
+    processPadMovement(e);
+    spacePad.addEventListener('mousemove', processPadMovement);
 });
 window.addEventListener('mouseup', () => {
-    vectorPad.removeEventListener('mousemove', interactuarPad);
+    spacePad.removeEventListener('mousemove', processPadMovement);
 });
 
-// ACCIONES DE BOTONES DIRECTOS (PÁNICO Y MUTACIONES)
-function ejecutarMutacionSustancial() {
-    HillMatrix.a = Math.floor(Math.random() * 48) + 1;
-    HillMatrix.b = Math.floor(Math.random() * 48) + 1;
-    HillMatrix.c = Math.floor(Math.random() * 20) + 1;
-    HillMatrix.d = Math.floor(Math.random() * 20) + 1;
-    pushLog(`Mutación Estocástica completada de forma segura.`);
-    procesarFlujoCripto();
+// ACTUALIZA LOS CONTENEDORES DE TEXTO MATEMÁTICO REAL EN TIEMPO REAL
+function actualizarMonitoresMatriciales() {
+    document.getElementById('k-row-0').textContent = `[ ${String(K.a).padStart(3, '0')} , ${String(K.b).padStart(3, '0')} ]`;
+    document.getElementById('k-row-1').textContent = `[ ${String(K.c).padStart(3, '0')} , ${String(K.d).padStart(3, '0')} ]`;
+    
+    let det = mod256(K.a * K.d - K.b * K.c);
+    document.getElementById('math-det').textContent = det;
+    
+    let invK = obtenerMatrizInversa(K);
+    const invDetSpan = document.getElementById('math-invdet');
+    const statusSpan = document.getElementById('tel-status');
+    
+    if (invK) {
+        document.getElementById('math-inv').textContent = "SÍ (VÁLIDA)";
+        document.getElementById('math-inv').style.color = "var(--cyber-green)";
+        statusSpan.textContent = "BIYECTIVA PERFECTA";
+        statusSpan.style.color = "var(--cyber-green)";
+        invDetSpan.textContent = calcularInversoDeterminante(det);
+        
+        document.getElementById('kinv-row-0').textContent = `[ ${String(invK.a).padStart(3, '0')} , ${String(invK.b).padStart(3, '0')} ]`;
+        document.getElementById('kinv-row-1').textContent = `[ ${String(invK.c).padStart(3, '0')} , ${String(invK.d).padStart(3, '0')} ]`;
+    } else {
+        document.getElementById('math-inv').textContent = "NO (ROTA)";
+        document.getElementById('math-inv').style.color = "var(--cyber-crimson)";
+        statusSpan.textContent = "COLAPSO CRIPTOGRÁFICO";
+        statusSpan.style.color = "var(--cyber-crimson)";
+        invDetSpan.textContent = "ERR";
+    }
 }
 
-function activarSobrecargaModulada() {
-    HillMatrix.a = 244; HillMatrix.b = 133; HillMatrix.c = 99; HillMatrix.d = 7;
-    pushLog(`ALERTA: Modulación extrema inyectada. Coeficientes saturados.`);
-    procesarFlujoCripto();
-}
+// PIPELINE DE PROCESAMIENTO MATRICIAL EN GRUPO DE PÍXELES DE 2x1 (RIGUROSO HILL)
+function renderCriptoPipeline() {
+    if (!coreImage) return;
 
-function restaurarValoresBase() {
-    HillMatrix = { a: 11, b: 8, c: 3, d: 1 };
-    pushLog(`Pipeline reseteado a coeficientes originales estables.`);
-    procesarFlujoCripto();
-}
-
-// PIPELINE DE TRANSFORMACIÓN MATRICIAL HILL MULTI-INTERACTIVA
-function procesarFlujoCripto() {
-    if (!imagenNucleo) return;
-
-    let ancho = imagenNucleo.width;
-    let alto = imagenNucleo.height;
-    if (ancho % 2 !== 0) ancho--; // Mantener bloques vectoriales de 2x1 pares
+    let ancho = coreImage.width;
+    let alto = coreImage.height;
+    if (ancho % 2 !== 0) ancho--; // Garantizar bloques vectoriales completos de dimensión 2
 
     const canvasIn = document.createElement('canvas');
     canvasIn.width = ancho; canvasIn.height = alto;
     const ctxIn = canvasIn.getContext('2d');
-    ctxIn.drawImage(imagenNucleo, 0, 0, ancho, alto);
-
+    ctxIn.drawImage(coreImage, 0, 0, ancho, alto);
     const dataIn = ctxIn.getImageData(0, 0, ancho, alto);
     const pixIn = dataIn.data;
 
@@ -443,118 +374,90 @@ function procesarFlujoCripto() {
     const dataOut = ctxOut.createImageData(ancho, alto);
     const pixOut = dataOut.data;
 
-    // Determinar matriz activa
-    let mActiva = { ...HillMatrix };
-    if (criptoModo === "descifrar") {
-        let mInv = obtenerInversaZ256(HillMatrix);
-        if (mInv) {
-            mActiva = mInv;
+    // Decidir la transformación lineal exacta a aplicar
+    let M = { ...K };
+    if (opMode === "descifrar") {
+        let deCipherMatrix = obtenerMatrizInversa(K);
+        if (deCipherMatrix) {
+            M = deCipherMatrix;
         } else {
-            // Si la matriz creada con el ratón no es invertible, usamos un bypass seguro
-            mActiva = { a: 1, b: 0, c: 0, d: 1 };
+            M = { a: 1, b: 0, c: 0, d: 1 }; // Fallback de resguardo
         }
     }
 
-    // Efecto interactivo del secuenciador rítmico: Máscaras de bits combinadas
-    let multSecuenciador = bitsSequencer.filter(b => b).length * 32;
-
+    // Ejecución del Álgebra Lineal Modular sobre la matriz de imagen
     for (let y = 0; y < alto; y++) {
         for (let x = 0; x < ancho; x += 2) {
             const idx0 = (y * ancho + x) * 4;
             const idx1 = (y * ancho + (x + 1)) * 4;
 
-            // Escala de grises pura
-            let X0 = Math.floor(0.299 * pixIn[idx0] + 0.587 * pixIn[idx0+1] + 0.114 * pixIn[idx0+2]);
-            let X1 = Math.floor(0.299 * pixIn[idx1] + 0.587 * pixIn[idx1+1] + 0.114 * pixIn[idx1+2]);
+            // Extraer Vector Columna Base (Luminancia Monocromática del byte)
+            let P1 = Math.floor(0.299 * pixIn[idx0] + 0.587 * pixIn[idx0+1] + 0.114 * pixIn[idx0+2]);
+            let P2 = Math.floor(0.299 * pixIn[idx1] + 0.587 * pixIn[idx1+1] + 0.114 * pixIn[idx1+2]);
 
-            // Mostrar escala de grises en la vista de flujo original
-            pixIn[idx0] = pixIn[idx0+1] = pixIn[idx0+2] = X0;
-            pixIn[idx1] = pixIn[idx1+1] = pixIn[idx1+2] = X1;
+            // Pintar escala de grises en el flujo izquierdo
+            pixIn[idx0] = pixIn[idx0+1] = pixIn[idx0+2] = P1;
+            pixIn[idx1] = pixIn[idx1+1] = pixIn[idx1+2] = P2;
 
-            // Multiplicación Hill Modular Modificada por el secuenciador
-            let Y0 = mod256(mActiva.a * X0 + mActiva.b * X1 + multSecuenciador);
-            let Y1 = mod256(mActiva.c * X0 + mActiva.d * X1);
+            // Multiplicación de Matrices Estricta de Hill Cipher:
+            // C1 = (M.a * P1 + M.b * P2) mod 256
+            // C2 = (M.c * P1 + M.d * P2) mod 256
+            let C1 = mod256(M.a * P1 + M.b * P2);
+            let C2 = mod256(M.c * P1 + M.d * P2);
 
-            // Inyectar datos modificados
-            pixOut[idx0] = pixOut[idx0+1] = pixOut[idx0+2] = Y0; pixOut[idx0+3] = 255;
-            pixOut[idx1] = pixOut[idx1+1] = pixOut[idx1+2] = Y1; pixOut[idx1+3] = 255;
+            // Guardar el vector resultante en los canales RGB del búfer de salida
+            pixOut[idx0] = pixOut[idx0+1] = pixOut[idx0+2] = C1; pixOut[idx0+3] = 255;
+            pixOut[idx1] = pixOut[idx1+1] = pixOut[idx1+2] = C2; pixOut[idx1+3] = 255;
         }
     }
 
     ctxIn.putImageData(dataIn, 0, 0);
     ctxOut.putImageData(dataOut, 0, 0);
 
-    // Renderizar directamente en los contenedores de la UI
-    const frameIn = document.getElementById('inputFrame');
-    frameIn.innerHTML = ""; frameIn.appendChild(canvasIn);
-
-    const frameOut = document.getElementById('outputFrame');
-    frameOut.innerHTML = ""; frameOut.appendChild(canvasOut);
-
-    // Dibujar osciloscopio dinámico reactivo
-    dibujarFormaOndaMatriz(mActiva);
+    // Actualizar Visores
+    const cIn = document.getElementById('inputContainer'); cIn.innerHTML = ""; cIn.appendChild(canvasIn);
+    const cOut = document.getElementById('outputContainer'); cOut.innerHTML = ""; cOut.appendChild(canvasOut);
 }
 
-// DIBUJO RETRO DE FORMA DE ONDA DE LA MATRIZ (OSCILOSCOPIO)
-function dibujarFormaOndaMatriz(m) {
-    const canvas = document.getElementById('oscCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    ctx.strokeStyle = "#00ff66";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    
-    // Dibujar una curva senoidal simulada distorsionada por los coeficientes de la matriz actual
-    for (let x = 0; x < canvas.width; x++) {
-        let y = canvas.height / 2 + 
-                Math.sin(x * 0.05 + m.a) * 20 + 
-                Math.cos(x * 0.1 + m.b) * 15;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    // Actualizar barra de entropía visual estéticamente de paso
-    let entropiaCalculada = Math.min(100, Math.floor((m.a + m.b + m.c + m.d) / 4));
-    document.getElementById('bar-ent').style.width = `${entropiaCalculada}%`;
-    document.getElementById('val-ent').textContent = `${entropiaCalculada}%`;
-}
-
-// GESTIÓN DE CONTROL DE ARCHIVOS EXTERNOS
+// FILE INGESTION LOGIC
 const dropZone = document.getElementById('dropZone');
 dropZone.addEventListener('dragover', (e) => e.preventDefault());
 dropZone.addEventListener('drop', (e) => {
     e.preventDefault();
-    if (e.dataTransfer.files.length > 0) inicializarImagen(e.dataTransfer.files[0]);
+    if(e.dataTransfer.files.length > 0) procesarArchivoStream(e.dataTransfer.files[0]);
 });
 document.getElementById('fileInput').addEventListener('change', (e) => {
-    if (e.target.files.length > 0) inicializarImagen(e.target.files[0]);
+    if(e.target.files.length > 0) procesarArchivoStream(e.target.files[0]);
 });
 
-function inicializarImagen(file) {
+function procesarArchivoStream(file) {
     const reader = new FileReader();
     reader.onload = function(event) {
         const img = new Image();
         img.onload = function() {
-            imagenNucleo = img;
-            pushLog(`Matriz de datos expandida: [${file.name}] cargado al búfer.`);
-            procesarFlujoCripto();
+            coreImage = img;
+            pushAuditLog(`Fichero cargado al buffer: [${file.name}]. Pipeline activo.`);
+            renderCriptoPipeline();
         };
         img.src = event.target.result;
     };
     reader.readAsDataURL(file);
 }
 
-function pushLog(msg) {
-    const stream = document.getElementById('logStream');
-    const item = document.createElement('div');
-    const tiempo = new Date().toTimeString().split(' ')[0];
-    item.className = "log-item";
-    item.innerHTML = `<span class="log-time">[${tiempo}]</span> <span>⚙️ ${msg}</span>`;
-    stream.appendChild(item);
-    stream.scrollTop = stream.scrollHeight;
+function pushAuditLog(msg) {
+    const box = document.getElementById('logBox');
+    const row = document.createElement('div');
+    const time = new Date().toTimeString().split(' ')[0];
+    row.className = "log-row";
+    row.innerHTML = `<span class="log-stamp">[${time}]</span> <span>⚙️ ${msg}</span>`;
+    box.appendChild(row);
+    box.scrollTop = box.scrollHeight;
 }
+
+// Ciclo de Inicialización Estático
+window.onload = function() {
+    actualizarMonitoresMatriciales();
+};
 </script>
 </body>
 </html>
