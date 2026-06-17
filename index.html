@@ -373,9 +373,6 @@
         .console-item { margin-bottom: 4px; }
         .console-time { color: var(--accent-azul); margin-right: 8px; }
 
-        /* =========================================================================
-           NUEVO CONTENEDOR EXCLUSIVO PARA LA DOCUMENTACIÓN INTEGRADA (HTML MANUAL)
-           ========================================================================= */
         .docs-section {
             background: #0b1120;
             border: 1px solid var(--border-color);
@@ -632,7 +629,7 @@
             <div class="doc-card amber-t">
                 <div class="doc-tag">Dinámica de Entropía</div>
                 <div class="doc-name">Δ Varianza Dinámica</div>
-                <div class="doc-desc">Representa el diferencial porcentual de variabilidad inducida en el canal. Un incremento positivo elevado (ej. <strong>+49%</strong>) constituye la evidencia matemática e irrefutable de que las transformaciones de la cascada Hill eliminaron la redundancia de datos del archivo.</div>
+                <div class="doc-desc">Representa el diferencial porcentual absoluto de variabilidad inducida en el canal. Un valor elevado constituye la evidencia matemática e irrefutable de la magnitud de la mutación lograda por el flujo de transformaciones en la cascada de Hill.</div>
             </div>
 
         </div>
@@ -783,12 +780,14 @@ function analizarEspectrosSeparados(pixIn, pixOut, esCifrado, nivel) {
     
     const desvOrig = Math.sqrt(varOrig / total); const desvProc = Math.sqrt(varProc / total);
     const mse = sumaMse / total;
-    const deltaVarianza = (((desvProc - desvOrig) / (desvOrig || 1)) * 100).toFixed(1);
+    
+    // APLICACIÓN DEL REQUERIMIENTO: VALOR ABSOLUTO PARA MEDIR INTENSIDAD DEL IMPACTO NETO
+    const deltaVarianza = Math.abs(((desvProc - desvOrig) / (desvOrig || 1)) * 100).toFixed(1);
 
     document.getElementById('valMse').textContent = mse.toFixed(1);
     document.getElementById('valRuidoOrig').textContent = desvOrig.toFixed(2);
     document.getElementById('valRuidoProc').textContent = desvProc.toFixed(2);
-    document.getElementById('valDeltaVarianza').textContent = `${deltaVarianza >= 0 ? '+' : ''}${deltaVarianza}%`;
+    document.getElementById('valDeltaVarianza').textContent = `${deltaVarianza}%`;
 
     document.getElementById('sparkIn').style.width = `${Math.min(desvOrig * 1.2, 100)}%`;
     document.getElementById('sparkOut').style.width = `${Math.min(desvProc * 1.2, 100)}%`;
