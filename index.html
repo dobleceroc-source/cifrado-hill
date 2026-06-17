@@ -380,6 +380,19 @@
 </head>
 <body>
 
+<div style="margin-bottom:20px;text-align:center;">
+    <label>Cantidad de matrices:</label>
+
+    <select id="nivelSeguridad"
+        onchange="if(ultimaImgProcesada) ejecutarPipelineCifrado(ultimaImgProcesada)">
+        <option value="1">1 matriz</option>
+        <option value="2">2 matrices</option>
+        <option value="3">3 matrices</option>
+        <option value="4">4 matrices</option>
+        <option value="5">5 matrices</option>
+    </select>
+</div>
+
 <div class="container">
     <div class="header">
         <h2>CryptoStudio Hill</h2>
@@ -470,14 +483,27 @@
 // =========================================================================
 // LÓGICA CRIPTOGRÁFICA ORIGINAL (COMPLETAMENTE INTACTA Y SIN ALTERACIONES)
 // =========================================================================
-const K = [
-    [11, 8],
-    [3,  1]
-];
-
-const K_INV = [
-    [59,  40],
-    [79, 137]
+const MATRICES = [
+    {
+        K: [[11, 8], [3, 1]],
+        K_INV: [[59, 40], [79, 137]]
+    },
+    {
+        K: [[5, 2], [7, 3]],
+        K_INV: [[253, 86], [177, 165]]
+    },
+    {
+        K: [[9, 4], [1, 5]],
+        K_INV: [[57, 208], [91, 205]]
+    },
+    {
+        K: [[13, 6], [5, 7]],
+        K_INV: [[35, 226], [231, 65]]
+    },
+    {
+        K: [[15, 2], [9, 11]],
+        K_INV: [[73, 194], [123, 227]]
+    }
 ];
 
 let ultimaImgProcesada = null;
@@ -489,7 +515,12 @@ function mod256(num) {
 function ejecutarPipelineCifrado(imgOriginal) {
     try {
         const modo = document.querySelector('input[name="modoCripto"]:checked').value;
-        const matrizActiva = (modo === 'cifrar') ? K : K_INV;
+        const nivel = parseInt(document.getElementById("nivelSeguridad").value);
+
+        const matricesActivas =
+           (modo === 'cifrar')
+              ? MATRICES.slice(0, nivel).map(m => m.K)
+              : MATRICES.slice(0, nivel).reverse().map(m => m.K_INV);
 
         let ancho = imgOriginal.width;
         let alto = imgOriginal.height;
@@ -547,8 +578,27 @@ function ejecutarPipelineCifrado(imgOriginal) {
                 const P0 = bufferGrises[i0];     
                 const P1 = bufferGrises[i1];     
 
-                const C0 = mod256((matrizActiva[0][0] * P0) + (matrizActiva[0][1] * P1));
-                const C1 = mod256((matrizActiva[1][0] * P0) + (matrizActiva[1][1] * P1));
+                let X0 = P0;
+                let X1 = P1;
+
+                for (const matriz of matricesActivas) {
+
+                  const Y0 = mod256(
+                     matriz[0][0] * X0 +
+                     matriz[0][1] * X1
+                  );
+
+                  const Y1 = mod256(
+                     matriz[1][0] * X0 +
+                     matriz[1][1] * X1
+                  );
+
+                  X0 = Y0;
+                  X1 = Y1;
+                }
+
+                const C0 = X0;
+                const C1 = X1;
 
                 const idx0 = i0 * 4;
                 const idx1 = i1 * 4;
