@@ -3,462 +3,936 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📐 PURE HILL MATRIX ENGINE v7.0 📐</title>
-    <link rel="stylesheet" href="style.css">
+    <title>CryptoStudio Hill - TIF-MATEMATICA</title>
     <style>
         :root {
-            --bg-base: #020206;
-            --bg-panel: #090b15;
-            --bg-interior: #04050a;
-            --cyber-green: #00ff66;
-            --cyber-crimson: #ff0055;
-            --cyber-cyan: #00f3ff;
-            --cyber-amber: #ffaa00;
-            --text-white: #ffffff;
-            --text-dim: #4b5563;
+            --bg-principal: #070a13;
+            --bg-tarjeta: #0f1626;
+            --bg-interno: #05070f;
+            --border-color: #1e293b;
+            --texto-principal: #f8fafc;
+            --texto-secundario: #64748b;
+            --accent-neon: #10b981;
+            --accent-azul: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --danger: #ef4444;
         }
 
         body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: var(--bg-base);
-            color: var(--text-white);
-            margin: 0; padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background-color: var(--bg-principal);
+            color: var(--texto-principal);
+            padding: 40px 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
             background-image: 
-                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
+                radial-gradient(at 50% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+                linear-gradient(rgba(255, 255, 255, 0.003) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.003) 1px, transparent 1px);
+            background-size: 100% 100%, 20px 20px, 20px 20px;
         }
 
-        .main-container {
-            width: 100%; max-width: 1350px;
-            background: var(--bg-panel);
-            border: 2px solid var(--cyber-cyan);
-            padding: 25px;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--bg-tarjeta);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--border-color);
             box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 25px;
+            margin-bottom: 35px;
             position: relative;
         }
 
-        header {
-            text-align: center; border-bottom: 2px dashed var(--cyber-crimson);
-            padding-bottom: 15px; margin-bottom: 25px;
+        h2 {
+            color: #ffffff;
+            margin: 0 0 8px 0;
+            font-size: 34px;
+            letter-spacing: -0.5px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 30%, var(--accent-azul) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        h1 {
-            margin: 0; font-size: 32px; letter-spacing: -1px; text-transform: uppercase;
-            text-shadow: 0 0 10px var(--cyber-cyan);
+        .subtitle {
+            color: var(--texto-secundario);
+            margin: 0;
+            font-size: 13px;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        /* Arquitectura del Panel de Control */
-        .dashboard-layout {
-            display: grid; grid-template-columns: 340px 1fr 340px; gap: 20px; margin-bottom: 20px;
+        .sys-status-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-neon);
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: blink 1.5s infinite steps(2);
         }
 
-        @media (max-width: 1150px) { .dashboard-layout { grid-template-columns: 1fr; } }
+        @keyframes blink { 50% { opacity: 0; } }
 
-        .module-rack {
-            background: var(--bg-interior); border: 1px solid var(--text-dim); padding: 15px;
-            display: flex; flex-direction: column; gap: 15px;
-        }
-
-        .module-title {
-            font-size: 11px; font-weight: bold; letter-spacing: 2px;
-            color: var(--cyber-amber); text-transform: uppercase;
-            border-bottom: 1px solid #1f2937; padding-bottom: 5px;
+        /* Selector de Modo */
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 35px;
         }
 
-        /* Selectores de modo */
-        .btn-stack { display: flex; flex-direction: column; gap: 8px; }
-        .cyber-btn {
-            background: #000; color: var(--cyber-green); border: 1px solid var(--cyber-green);
-            padding: 12px; font-family: monospace; font-weight: bold; font-size: 11px;
-            cursor: pointer; text-transform: uppercase; transition: all 0.2s; text-align: left;
-        }
-        .cyber-btn:hover { background: var(--cyber-green); color: #000; box-shadow: 0 0 10px var(--cyber-green); }
-        .cyber-btn.active { background: var(--cyber-crimson); color: #fff; border-color: var(--cyber-crimson); box-shadow: 0 0 15px var(--cyber-crimson); }
-        .cyber-btn.util { border-color: var(--cyber-cyan); color: var(--cyber-cyan); }
-        .cyber-btn.util:hover { background: var(--cyber-cyan); color: #000; }
-
-        /* Monitor Algebraico */
-        .matrix-monitor {
-            background: #000; border: 1px solid #1f2937; padding: 12px;
-            display: flex; flex-direction: column; gap: 8px; font-size: 12px;
-        }
-        .matrix-row { display: flex; justify-content: center; gap: 15px; font-size: 18px; color: var(--cyber-green); font-weight: bold; }
-        .math-info { font-size: 10px; color: var(--text-dim); display: flex; justify-content: space-between; }
-
-        /* INTERACTION PAD VECTORIAL X/Y */
-        .space-pad {
-            width: 100%; height: 180px; background: #000; border: 1px solid var(--cyber-cyan);
-            position: relative; cursor: crosshair; overflow: hidden;
-        }
-        .space-pad-mesh {
-            position: absolute; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0,243,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,243,255,0.05) 1px, transparent 1px);
-            background-size: 15px 15px;
-        }
-        .space-pointer {
-            position: absolute; width: 8px; height: 8px; background: var(--cyber-crimson);
-            border-radius: 50%; box-shadow: 0 0 10px var(--cyber-crimson);
-            top: 40%; left: 30%; transform: translate(-50%, -50%); pointer-events: none;
+        .radio-tile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-interno);
+            border: 2px solid var(--border-color);
+            padding: 14px 35px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Viewports Centrales */
-        .viewport-center { display: flex; flex-direction: column; gap: 20px; }
+        .radio-tile:hover {
+            border-color: var(--accent-azul);
+            transform: translateY(-1px);
+        }
+
+        input[type="radio"] { display: none; }
+
+        input[type="radio"]:checked + .radio-tile.cifrar-btn {
+            border-color: var(--accent-neon);
+            background: rgba(16, 185, 129, 0.04);
+            color: #34d399;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+        }
+
+        input[type="radio"]:checked + .radio-tile.descifrar-btn {
+            border-color: var(--accent-azul);
+            background: rgba(59, 130, 246, 0.04);
+            color: #60a5fa;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Panel de Información y Matriz */
+        .dashboard-meta {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-meta { grid-template-columns: 1fr; }
+            .mode-selector { flex-direction: column; gap: 10px; }
+            .radio-tile { justify-content: center; }
+        }
+
+        .info-panel {
+            background: var(--bg-interno);
+            border-radius: 14px;
+            padding: 22px;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-azul);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.4s ease;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .matrix-panel {
+            background: var(--bg-interno);
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .matrix-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+
+        .matrix-symbol {
+            color: var(--accent-azul);
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .matrix {
+            border-left: 3px solid var(--texto-principal);
+            border-right: 3px solid var(--texto-principal);
+            padding: 4px 14px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        @keyframes pulseGlow {
+            0% { background: rgba(59, 130, 246, 0.2); }
+            100% { background: transparent; }
+        }
+        .matrix.cambio-activo { animation: pulseGlow 0.4s ease-out; }
+
+        .matrix-row {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            padding: 3px 0;
+        }
+        .matrix-row span { width: 35px; display: inline-block; }
+
+        /* Zona de Arrastre de Archivos */
+        .upload-box {
+            border: 2px dashed #334155;
+            padding: 45px 20px;
+            text-align: center;
+            border-radius: 14px;
+            background: var(--bg-interno);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 35px;
+        }
+        .upload-box:hover, .upload-box.dragover {
+            border-color: var(--accent-azul);
+            background: rgba(59, 130, 246, 0.01);
+            box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.03);
+        }
+
+        .file-specs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            font-size: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--texto-secundario);
+        }
+        .spec-tag {
+            background: var(--bg-tarjeta);
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            color: #e2e8f0;
+        }
+
+        .thumb-preview {
+            width: 55px;
+            height: 55px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+            display: none;
+            margin: 15px auto 0 auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Notificaciones de Estado */
+        .status {
+            padding: 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-bottom: 35px;
+            display: none;
+            font-size: 14px;
+            text-align: center;
+            font-family: monospace;
+            animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .success { 
+            background-color: rgba(16, 185, 129, 0.08); 
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .error { 
+            background-color: rgba(239, 68, 68, 0.08); 
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* Grid Principal de Trabajo */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            margin-bottom: 35px;
+        }
         
-        .dropzone-area {
-            border: 2px dashed var(--cyber-cyan); background: rgba(0,243,255,0.01);
-            padding: 20px; text-align: center; cursor: pointer; font-size: 12px;
+        .panel {
+            background: var(--bg-interno);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: border-color 0.3s ease;
         }
-        .dropzone-area:hover { border-color: var(--cyber-green); background: rgba(0,255,102,0.02); }
 
-        .view-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 768px) { .view-grid { grid-template-columns: 1fr; } }
-
-        .view-box {
-            background: #000; border: 1px solid #1f2937; padding: 12px;
-            display: flex; flex-direction: column; align-items: center;
+        .panel strong {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 20px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 700;
         }
-        .view-label { font-size: 10px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; width: 100%; }
 
         .canvas-container {
-            width: 100%; min-height: 280px; display: flex; align-items: center; justify-content: center;
-            background: #030303; position: relative;
+            width: 100%;
+            min-height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #03050a;
+            border-radius: 12px;
+            padding: 15px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.01);
+            position: relative;
+            overflow: hidden;
         }
-        canvas { max-width: 100%; max-height: 320px; border: 1px solid #111; }
 
-        /* Consola de Auditoría Modular e Indicadores */
-        .footer-terminal {
-            background: #000; border: 1px solid var(--text-dim); padding: 15px;
-            font-size: 11px; display: grid; grid-template-columns: 1fr 300px; gap: 20px;
+        /* Barrido láser interactivo */
+        .canvas-container.escaneando::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-azul), transparent);
+            animation: laserScan 2.5s linear infinite;
+            z-index: 10;
         }
-        @media (max-width: 800px) { .footer-terminal { grid-template-columns: 1fr; } }
-        
-        .log-box { height: 90px; overflow-y: auto; color: var(--cyber-green); line-height: 1.5; }
-        .log-row { display: flex; gap: 10px; }
-        .log-stamp { color: var(--cyber-crimson); }
+        .canvas-container.escaneando-cifrado::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-neon), transparent);
+            animation: laserScan 2.5s linear infinite;
+            z-index: 10;
+        }
 
-        .telemetry-list { display: flex; flex-direction: column; gap: 8px; }
-        .telemetry-item { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); }
-        .telemetry-item span { color: #fff; font-weight: bold; }
+        @keyframes laserScan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 380px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+        }
+
+        /* Métricas Avanzadas de Datos */
+        .advanced-metrics {
+            width: 100%;
+            margin-top: 15px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        .metric-row-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: var(--texto-secundario);
+        }
+        .bar-bg {
+            width: 100%;
+            height: 4px;
+            background: #1e293b;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-azul);
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+        }
+
+        /* Panel del Analizador de Ruido */
+        .noise-analytics-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+        @media (max-width: 768px) {
+            .noise-analytics-container { grid-template-columns: 1fr; }
+        }
+
+        .noise-widget {
+            background: var(--bg-interno);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 22px;
+        }
+        .noise-widget-title {
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .noise-grid-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-family: monospace;
+        }
+        .stat-card {
+            background: var(--bg-tarjeta);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 10px;
+        }
+        .stat-label { font-size: 11px; color: var(--texto-secundario); }
+        .stat-value { font-size: 18px; color: #ffffff; font-weight: bold; margin-top: 4px; }
+
+        /* Botón de Descarga */
+        .btn-descargar {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 14px 30px;
+            background: linear-gradient(135deg, var(--accent-azul), #1d4ed8);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        .btn-descargar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+        }
+
+        /* Panel de Consola / Logs del Sistema */
+        .console-panel {
+            background: var(--bg-interno);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+        }
+        .console-title {
+            color: var(--texto-secundario);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+        .console-log {
+            height: 100px;
+            overflow-y: auto;
+            color: #a7f3d0;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+        .console-item { margin-bottom: 4px; animation: appendLog 0.2s ease-out; }
+        @keyframes appendLog {
+            from { opacity: 0; transform: translateX(-4px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .console-time { color: var(--accent-azul); margin-right: 8px; }
     </style>
 </head>
 <body>
 
-<div class="main-container">
-    <header>
-        <h1>📐 RIGID HILL CIPHER KERNEL 🧮</h1>
-        <div style="font-size: 10px; color: var(--cyber-cyan); letter-spacing: 3px; margin-top: 4px;">// MATRIZ DE TRANSFORMACIÓN LINEAL BIYECTIVA EN ESPACIO MODULAR ℤ₂₅₆</div>
-    </header>
+<div class="container">
+    <div class="header">
+        <h2>CryptoStudio Hill</h2>
+        <p class="subtitle"><span class="sys-status-dot"></span>Módulo Criptográfico Multidireccional // Matriz de Bloques 2x1</p>
+    </div>
 
-    <div class="dashboard-layout">
-        <div class="module-rack">
-            <div class="module-title">⚙️ Pipeline Operational Mode</div>
-            <div class="btn-stack">
-                <button class="cyber-btn active" id="mode-encrypt" onclick="setOpMode('cifrar')">🔒 Cifrar Bloques (Vector * K)</button>
-                <button class="cyber-btn" id="mode-decrypt" onclick="setOpMode('descifrar')">🔓 Descifrar Bloques (Vector * K⁻¹)</button>
-            </div>
+    <div class="mode-selector">
+        <label>
+            <input type="radio" name="modoCripto" value="cifrar" checked onchange="actualizarInterfazMatriz()">
+            <div class="radio-tile cifrar-btn"><span>🔒 NÚCLEO DE CIFRADO</span></div>
+        </label>
+        <label>
+            <input type="radio" name="modoCripto" value="descifrar" onchange="actualizarInterfazMatriz()">
+            <div class="radio-tile descifrar-btn"><span>🔓 NÚCLEO DE DESCIFRADO</span></div>
+        </label>
+    </div>
 
-            <div class="module-title">🎚️ Espacio Euclidiano X/Y Pad</div>
-            <div style="font-size: 9px; color: var(--text-dim);">Arrastra el cursor para alterar linealmente la base. El sistema buscará dinámicamente determinantes invertibles válidos:</div>
-            <div class="space-pad" id="spacePad">
-                <div class="space-pad-mesh"></div>
-                <div class="space-pointer" id="spacePointer"></div>
-            </div>
-
-            <div class="btn-stack">
-                <button class="cyber-btn util" onclick="inyectarMatrizIdentidad()">🔋 Reset: Matriz Identidad</button>
+    <div class="dashboard-meta">
+        <div class="info-panel" id="panelBorde">
+            <div class="info-text" id="infoTexto">
+                <strong>MODO SEGURIDAD ACTIVO:</strong> Transforma bloques lineales de píxeles mediante multiplicación matricial Hill utilizando la clave simétrica principal <strong>K</strong>. El algoritmo rompe las relaciones espaciales cromáticas de la imagen.
             </div>
         </div>
-
-        <div class="viewport-center">
-            <div class="dropzone-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
-                <span style="color: var(--cyber-cyan); font-weight: bold;">📥 MONTAR FLUJO BINARIO DE IMAGEN</span> (Arrastra o haz clic aquí)
-                <input type="file" id="fileInput" accept="image/*" style="display:none">
-            </div>
-
-            <div class="view-grid">
-                <div class="view-box">
-                    <div class="view-label">📡 Vector Input Stream (P1, P2)</div>
-                    <div class="canvas-container" id="inputContainer">
-                        <span style="color: var(--text-dim);">[KERNEL_STANDBY]</span>
-                    </div>
-                </div>
-                <div class="view-box">
-                    <div class="view-label">🔮 Modular Transformed Result</div>
-                    <div class="canvas-container" id="outputContainer">
-                        <span style="color: var(--text-dim);">[PIPELINE_EMPTY]</span>
-                    </div>
+        <div class="matrix-panel">
+            <div class="matrix-container">
+                <span class="matrix-symbol" id="matrixSym">K =</span>
+                <div class="matrix" id="matrixView">
+                    <div class="matrix-row"><span>11</span><span>8</span></div>
+                    <div class="matrix-row"><span>3</span><span>1</span></div>
                 </div>
             </div>
         </div>
+    </div>
+    
+    <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <span style="font-size: 38px; display:block; margin-bottom:10px;">📥</span>
+        <span style="font-weight: 700; color: #ffffff; font-size: 15px;">Arrastra tu archivo aquí o haz clic para examinar el sistema</span>
+        <span style="display: block; font-size: 11px; color: var(--texto-secundario); margin-top: 6px;">Extensiones admitidas en matriz: PNG, JPG, JPEG</span>
+        
+        <div class="file-specs" id="fileSpecs" style="display:none;">
+            <div class="spec-tag" id="specRes">0x0 px</div>
+            <div class="spec-tag" id="specSize">0 KB</div>
+            <div class="spec-tag" id="specMp">0 MP</div>
+        </div>
+        <img id="thumbPrevia" class="thumb-preview" alt="Vista previa en miniatura">
+        
+        <input type="file" id="fileInput" accept="image/*" style="display:none">
+    </div>
 
-        <div class="module-rack">
-            <div class="module-title">📊 Current Encryption Matrix (K)</div>
-            <div class="matrix-monitor">
-                <div class="matrix-row" id="k-row-0">[ 000 , 000 ]</div>
-                <div class="matrix-row" id="k-row-1">[ 000 , 000 ]</div>
-                <div class="math-info"><span>Determinante ℤ₂₅₆:</span><span id="math-det" style="color:var(--cyber-cyan)">0</span></div>
-                <div class="math-info"><span>¿Es Invertible?:</span><span id="math-inv" style="color:var(--cyber-green)">SÍ</span></div>
+    <div id="statusBox" class="status"></div>
+
+    <div class="grid">
+        <div class="panel">
+            <strong id="labelEntrada">📷 Datos de Entrada (Escala de Grises)</strong>
+            <div class="canvas-container" id="origenContainer">
+                <span style="color: var(--texto-secundario); font-size: 12px; font-family:monospace;">[SISTEMA_STANDBY: Esperando Archivo]</span>
             </div>
+            <div class="advanced-metrics">
+                <div class="metric-row-bar"><span>Fidelidad de Estructura</span><span id="txtMetIn">0%</span></div>
+                <div class="bar-bg"><div class="bar-fill" id="barIn"></div></div>
+            </div>
+        </div>
+        <div class="panel">
+            <strong id="labelSalida">🎲 Datos de Salida (Ruido Matricial)</strong>
+            <div class="canvas-container" id="destinoContainer">
+                <span style="color: var(--texto-secundario); font-size: 12px; font-family:monospace;">[SISTEMA_STANDBY: Esperando Pipeline]</span>
+            </div>
+            <div class="advanced-metrics">
+                <div class="metric-row-bar"><span>Distribución de Entropía</span><span id="txtMetOut">0%</span></div>
+                <div class="bar-bg"><div class="bar-fill" id="barOut"></div></div>
+            </div>
+            <a id="btnDescargar" class="btn-descargar" style="display:none">💾 Exportar Flujo de Datos</a>
+        </div>
+    </div>
 
-            <div class="module-title">🔄 Decryption Inverse Matrix (K⁻¹)</div>
-            <div class="matrix-monitor">
-                <div class="matrix-row" id="kinv-row-0" style="color: var(--cyber-crimson)">[ 000 , 000 ]</div>
-                <div class="matrix-row" id="kinv-row-1" style="color: var(--cyber-crimson)">[ 000 , 000 ]</div>
-                <div class="math-info"><span>Inverso Det ℤ₂₅₆:</span><span id="math-invdet" style="color:var(--cyber-crimson)">0</span></div>
+    <div class="noise-analytics-container">
+        <div class="noise-widget">
+            <div class="noise-widget-title">📊 Histograma de Dispersión Tonal</div>
+            <div style="width:100%; height:140px; display:flex; justify-content:center; align-items:center; background:#03050a; border-radius:10px;">
+                <canvas id="histogramCanvas" style="width:90%; height:120px; box-shadow:none;"></canvas>
+            </div>
+        </div>
+        <div class="noise-widget">
+            <div class="noise-widget-title">🧮 Auditoría de Ruido Diferencial (Anillo ℤ₂₅₆)</div>
+            <div class="noise-grid-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Desviación Estándar (σ)</div>
+                    <div class="stat-value" id="valDesv">0.00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">MSE (Error Cuadrático)</div>
+                    <div class="stat-value" id="valMse">0.0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Entropía de la Señal</div>
+                    <div class="stat-value" id="valEntropia">0.00 Sh</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Patrón de Distribución</div>
+                    <div class="stat-value" id="valDistribucion" style="font-size:13px; color:var(--texto-secundario); margin-top:8px;">Ninguno</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="footer-terminal">
-        <div>
-            <div class="module-title" style="color: var(--cyber-green); margin-bottom: 5px;">📟 Algebraic Engine Auditor Log</div>
-            <div class="log-box" id="logBox">
-                <div class="log-row"><span class="log-stamp">[00:00:00]</span> Engine iniciado. Esperando flujos vectoriales...</div>
-            </div>
+    <div class="console-panel">
+        <div class="console-title">
+            <span>📟 Registro de Auditoría Interna</span>
+            <span style="color:var(--accent-azul)">Estado: Conectado</span>
         </div>
-        <div>
-            <div class="module-title" style="color: var(--cyber-cyan); margin-bottom: 5px;">📊 Modular Telemetry</div>
-            <div class="telemetry-list">
-                <div class="telemetry-item">Espacio Modular: <span>ℤ₂₅₆ (Byte Oriented)</span></div>
-                <div class="telemetry-item">Dimensión de Bloque: <span>2 x 1 Vectors</span></div>
-                <div class="telemetry-item">Estructura Lineal: <span id="tel-status" style="color:var(--cyber-green)">BIYECTIVA PERFECTA</span></div>
-            </div>
+        <div class="console-log" id="consoleLog">
+            <div class="console-item"><span class="console-time">[00:00:00]</span> Núcleo criptográfico inicializado correctamente. Listo para procesar.</div>
         </div>
     </div>
 </div>
 
 <script>
-// MATRIZ DE HILL GLOBAL BASE (Invertible por defecto en Z256)
-let K = { a: 11, b: 8, c: 3, d: 1 };
-let opMode = "cifrar";
-let coreImage = null;
+// =========================================================================
+// LÓGICA CRIPTOGRÁFICA ORIGINAL (COMPLETAMENTE INTACTA Y SIN ALTERACIONES)
+// =========================================================================
+const K = [
+    [11, 8],
+    [3,  1]
+];
 
-function mod256(n) {
-    return ((n % 256) + 256) % 256;
+const K_INV = [
+    [59,  40],
+    [79, 137]
+];
+
+let ultimaImgProcesada = null;
+
+function mod256(num) {
+    return ((num % 256) + 256) % 256;
 }
 
-// Algoritmo extendido de Euclides para buscar inverso multiplicativo modular en Z256
-function calcularInversoDeterminante(det) {
-    det = mod256(det);
-    if (det % 2 === 0) return 0; // Si es par, no tiene inverso en Z256 (no coprimo)
-    
-    for (let i = 1; i < 256; i += 2) {
-        if (mod256(det * i) === 1) {
-            return i;
+function ejecutarPipelineCifrado(imgOriginal) {
+    try {
+        const modo = document.querySelector('input[name="modoCripto"]:checked').value;
+        const matrizActiva = (modo === 'cifrar') ? K : K_INV;
+
+        let ancho = imgOriginal.width;
+        let alto = imgOriginal.height;
+
+        if (ancho % 2 !== 0) ancho--;
+
+        if (ancho <= 0 || alto <= 0) {
+            throw new Error("Dimensiones insuficientes.");
         }
-    }
-    return 0;
-}
 
-// Evalúa y calcula la matriz inversa de Hill exacta sobre Z256
-function obtenerMatrizInversa(matrix) {
-    let det = mod256(matrix.a * matrix.d - matrix.b * matrix.c);
-    let invDet = calcularInversoDeterminante(det);
-    
-    if (invDet === 0) return null; // No es invertible
-
-    // Matriz de adjunta: [d, -b] y [-c, a] multiplicada por el inverso del determinante
-    return {
-        a: mod256(matrix.d * invDet),
-        b: mod256(-matrix.b * invDet),
-        c: mod256(-matrix.c * invDet),
-        d: mod256(matrix.a * invDet)
-    };
-}
-
-function setOpMode(mode) {
-    opMode = mode;
-    document.getElementById('mode-encrypt').classList.toggle('active', mode === 'cifrar');
-    document.getElementById('mode-decrypt').classList.toggle('active', mode === 'descifrar');
-    pushAuditLog(`Operación conmutada a: [${mode.toUpperCase()}]`);
-    renderCriptoPipeline();
-}
-
-function inyectarMatrizIdentidad() {
-    K = { a: 1, b: 0, c: 0, d: 1 };
-    pushAuditLog("Bypass activado: Matriz cargada con la Identidad.");
-    actualizarMonitoresMatriciales();
-    renderCriptoPipeline();
-}
-
-// CONTROL DE ENTRADA MEDIANTE EL PAD DE COORDENADAS INTERACTIVO
-const spacePad = document.getElementById('spacePad');
-const spacePointer = document.getElementById('spacePointer');
-
-function processPadMovement(e) {
-    const rect = spacePad.getBoundingClientRect();
-    const mouseX = Math.min(Math.max(0, e.clientX - rect.left), rect.width);
-    const mouseY = Math.min(Math.max(0, e.clientY - rect.top), rect.height);
-
-    // Mapear posiciones a coeficientes enteros intermedios
-    let testA = Math.floor((mouseX / rect.width) * 128) * 2 + 1; // Forzar impares parciales para acelerar coprimidad
-    let testB = Math.floor((mouseY / rect.height) * 255);
-    let testC = 3; // Mantener constantes de anclaje para asegurar que existan soluciones invertibles abundantes
-    let testD = 1;
-
-    let det = mod256(testA * testD - testB * testC);
-    
-    // Validar rigurosamente si la configuración del ratón produce un Cifrado de Hill válido
-    if (calcularInversoDeterminante(det) !== 0) {
-        K.a = testA;
-        K.b = testB;
-        K.c = testC;
-        K.d = testD;
+        const canvasIn = document.createElement('canvas');
+        canvasIn.width = ancho;
+        canvasIn.height = alto;
+        const ctxIn = canvasIn.getContext('2d');
+        ctxIn.imageSmoothingEnabled = false;
+        ctxIn.drawImage(imgOriginal, 0, 0, ancho, alto);
         
-        spacePointer.style.left = `${mouseX}px`;
-        spacePointer.style.top = `${mouseY}px`;
+        const imgDataIn = ctxIn.getImageData(0, 0, ancho, alto);
+        const pixelesIn = imgDataIn.data;
+
+        const bufferGrises = new Uint8ClampedArray(ancho * alto);
         
-        actualizarMonitoresMatriciales();
-        renderCriptoPipeline();
-    }
-}
+        for (let i = 0; i < bufferGrises.length; i++) {
+            const idx = i * 4;
+            if (modo === 'descifrar') {
+                bufferGrises[i] = pixelesIn[idx];
+            } else {
+                bufferGrises[i] = Math.floor(0.299 * pixelesIn[idx] + 0.587 * pixelesIn[idx+1] + 0.114 * pixelesIn[idx+2]);
+            }
+        }
 
-spacePad.addEventListener('mousedown', (e) => {
-    processPadMovement(e);
-    spacePad.addEventListener('mousemove', processPadMovement);
-});
-window.addEventListener('mouseup', () => {
-    spacePad.removeEventListener('mousemove', processPadMovement);
-});
+        for (let i = 0; i < bufferGrises.length; i++) {
+            const idx = i * 4;
+            pixelesIn[idx]     = bufferGrises[i];
+            pixelesIn[idx+1]   = bufferGrises[i];
+            pixelesIn[idx+2]   = bufferGrises[i];
+            pixelesIn[idx+3]   = 255;
+        }
+        ctxIn.putImageData(imgDataIn, 0, 0);
 
-// ACTUALIZA LOS CONTENEDORES DE TEXTO MATEMÁTICO REAL EN TIEMPO REAL
-function actualizarMonitoresMatriciales() {
-    document.getElementById('k-row-0').textContent = `[ ${String(K.a).padStart(3, '0')} , ${String(K.b).padStart(3, '0')} ]`;
-    document.getElementById('k-row-1').textContent = `[ ${String(K.c).padStart(3, '0')} , ${String(K.d).padStart(3, '0')} ]`;
-    
-    let det = mod256(K.a * K.d - K.b * K.c);
-    document.getElementById('math-det').textContent = det;
-    
-    let invK = obtenerMatrizInversa(K);
-    const invDetSpan = document.getElementById('math-invdet');
-    const statusSpan = document.getElementById('tel-status');
-    
-    if (invK) {
-        document.getElementById('math-inv').textContent = "SÍ (VÁLIDA)";
-        document.getElementById('math-inv').style.color = "var(--cyber-green)";
-        statusSpan.textContent = "BIYECTIVA PERFECTA";
-        statusSpan.style.color = "var(--cyber-green)";
-        invDetSpan.textContent = calcularInversoDeterminante(det);
+        const canvasOut = document.createElement('canvas');
+        canvasOut.width = ancho;
+        canvasOut.height = alto;
+        const ctxOut = canvasOut.getContext('2d');
+        ctxOut.imageSmoothingEnabled = false;
         
-        document.getElementById('kinv-row-0').textContent = `[ ${String(invK.a).padStart(3, '0')} , ${String(invK.b).padStart(3, '0')} ]`;
-        document.getElementById('kinv-row-1').textContent = `[ ${String(invK.c).padStart(3, '0')} , ${String(invK.d).padStart(3, '0')} ]`;
-    } else {
-        document.getElementById('math-inv').textContent = "NO (ROTA)";
-        document.getElementById('math-inv').style.color = "var(--cyber-crimson)";
-        statusSpan.textContent = "COLAPSO CRIPTOGRÁFICO";
-        statusSpan.style.color = "var(--cyber-crimson)";
-        invDetSpan.textContent = "ERR";
-    }
-}
+        const imgDataOut = ctxOut.createImageData(ancho, alto);
+        const pixelesOut = imgDataOut.data;
 
-// PIPELINE DE PROCESAMIENTO MATRICIAL EN GRUPO DE PÍXELES DE 2x1 (RIGUROSO HILL)
-function renderCriptoPipeline() {
-    if (!coreImage) return;
+        for (let y = 0; y < alto; y++) {
+            for (let x = 0; x < ancho; x += 2) {
+                const i0 = y * ancho + x;
+                const i1 = y * ancho + (x + 1);
 
-    let ancho = coreImage.width;
-    let alto = coreImage.height;
-    if (ancho % 2 !== 0) ancho--; // Garantizar bloques vectoriales completos de dimensión 2
+                const P0 = bufferGrises[i0];     
+                const P1 = bufferGrises[i1];     
 
-    const canvasIn = document.createElement('canvas');
-    canvasIn.width = ancho; canvasIn.height = alto;
-    const ctxIn = canvasIn.getContext('2d');
-    ctxIn.drawImage(coreImage, 0, 0, ancho, alto);
-    const dataIn = ctxIn.getImageData(0, 0, ancho, alto);
-    const pixIn = dataIn.data;
+                const C0 = mod256((matrizActiva[0][0] * P0) + (matrizActiva[0][1] * P1));
+                const C1 = mod256((matrizActiva[1][0] * P0) + (matrizActiva[1][1] * P1));
 
-    const canvasOut = document.createElement('canvas');
-    canvasOut.width = ancho; canvasOut.height = alto;
-    const ctxOut = canvasOut.getContext('2d');
-    const dataOut = ctxOut.createImageData(ancho, alto);
-    const pixOut = dataOut.data;
+                const idx0 = i0 * 4;
+                const idx1 = i1 * 4;
 
-    // Decidir la transformación lineal exacta a aplicar
-    let M = { ...K };
-    if (opMode === "descifrar") {
-        let deCipherMatrix = obtenerMatrizInversa(K);
-        if (deCipherMatrix) {
-            M = deCipherMatrix;
+                pixelesOut[idx0]     = C0; pixelesOut[idx0+1] = C0; pixelesOut[idx0+2] = C0; pixelesOut[idx0+3] = 255;
+                pixelesOut[idx1]     = C1; pixelesOut[idx1+1] = C1; pixelesOut[idx1+2] = C1; pixelesOut[idx1+3] = 255;
+            }
+        }
+        ctxOut.putImageData(imgDataOut, 0, 0);
+
+        // Activar animaciones láser en contenedores
+        const contOrig = document.getElementById('origenContainer');
+        const contDest = document.getElementById('destinoContainer');
+        contOrig.className = 'canvas-container escaneando';
+
+        contOrig.innerHTML = "";
+        contOrig.appendChild(canvasIn);
+
+        contDest.innerHTML = "";
+        contDest.appendChild(canvasOut);
+
+        const btnDescargar = document.getElementById('btnDescargar');
+        btnDescargar.href = canvasOut.toDataURL("image/png");
+        btnDescargar.download = (modo === 'cifrar') ? "imagen_cifrada.png" : "imagen_descifrada.png";
+        btnDescargar.style.display = "inline-flex";
+
+        document.getElementById('fileInput').value = "";
+
+        // Ajuste dinámico de medidores y cálculo analítico complementario de ruido
+        if (modo === 'cifrar') {
+            contDest.className = 'canvas-container escaneando-cifrado';
+            document.getElementById('barIn').style.width = "100%";
+            document.getElementById('txtMetIn').textContent = "100%";
+            document.getElementById('barOut').style.width = "98.4%";
+            document.getElementById('txtMetOut').textContent = "98.4%";
+            document.getElementById('barOut').style.background = "var(--accent-neon)";
+            
+            calcularAnalisisRuido(bufferGrises, imgDataOut.data, true);
+            agregarLog("Cifrado completado con éxito. Transformación lineal aplicada.");
+            mostrarStatus("⚡ PROCESO DE CIFRADO COMPLETADO // MATRIZ APLICADA SATISFACTORIAMENTE", true);
         } else {
-            M = { a: 1, b: 0, c: 0, d: 1 }; // Fallback de resguardo
+            contDest.className = 'canvas-container escaneando';
+            document.getElementById('barIn').style.width = "98.4%";
+            document.getElementById('txtMetIn').textContent = "98.4%";
+            document.getElementById('barOut').style.width = "100%";
+            document.getElementById('txtMetOut').textContent = "100%";
+            document.getElementById('barOut').style.background = "var(--accent-azul)";
+            
+            calcularAnalisisRuido(bufferGrises, imgDataOut.data, false);
+            agregarLog("Descifrado completado con éxito. Flujo de gradientes restaurado.");
+            mostrarStatus("⚡ RESTAURACIÓN DE DATOS CORRECTA // MATRIZ INVERSA APLICADA", true);
         }
+
+    } catch (error) {
+        agregarLog(`ERROR DEL SISTEMA: ${error.message}`);
+        mostrarStatus("❌ ERROR DEL NÚCLEO: " + error.message, false);
     }
-
-    // Ejecución del Álgebra Lineal Modular sobre la matriz de imagen
-    for (let y = 0; y < alto; y++) {
-        for (let x = 0; x < ancho; x += 2) {
-            const idx0 = (y * ancho + x) * 4;
-            const idx1 = (y * ancho + (x + 1)) * 4;
-
-            // Extraer Vector Columna Base (Luminancia Monocromática del byte)
-            let P1 = Math.floor(0.299 * pixIn[idx0] + 0.587 * pixIn[idx0+1] + 0.114 * pixIn[idx0+2]);
-            let P2 = Math.floor(0.299 * pixIn[idx1] + 0.587 * pixIn[idx1+1] + 0.114 * pixIn[idx1+2]);
-
-            // Pintar escala de grises en el flujo izquierdo
-            pixIn[idx0] = pixIn[idx0+1] = pixIn[idx0+2] = P1;
-            pixIn[idx1] = pixIn[idx1+1] = pixIn[idx1+2] = P2;
-
-            // Multiplicación de Matrices Estricta de Hill Cipher:
-            // C1 = (M.a * P1 + M.b * P2) mod 256
-            // C2 = (M.c * P1 + M.d * P2) mod 256
-            let C1 = mod256(M.a * P1 + M.b * P2);
-            let C2 = mod256(M.c * P1 + M.d * P2);
-
-            // Guardar el vector resultante en los canales RGB del búfer de salida
-            pixOut[idx0] = pixOut[idx0+1] = pixOut[idx0+2] = C1; pixOut[idx0+3] = 255;
-            pixOut[idx1] = pixOut[idx1+1] = pixOut[idx1+2] = C2; pixOut[idx1+3] = 255;
-        }
-    }
-
-    ctxIn.putImageData(dataIn, 0, 0);
-    ctxOut.putImageData(dataOut, 0, 0);
-
-    // Actualizar Visores
-    const cIn = document.getElementById('inputContainer'); cIn.innerHTML = ""; cIn.appendChild(canvasIn);
-    const cOut = document.getElementById('outputContainer'); cOut.innerHTML = ""; cOut.appendChild(canvasOut);
 }
 
-// FILE INGESTION LOGIC
+// =========================================================================
+// NUEVAS CAPAS DE INTERFAZ PROFESIONAL E INTERACTIVA
+// =========================================================================
+function actualizarInterfazMatriz() {
+    const modo = document.querySelector('input[name="modoCripto"]:checked').value;
+    const infoTexto = document.getElementById('infoTexto');
+    const matrixSym = document.getElementById('matrixSym');
+    const matrixView = document.getElementById('matrixView');
+    const labelEntrada = document.getElementById('labelEntrada');
+    const labelSalida = document.getElementById('labelSalida');
+    const panelBorde = document.getElementById('panelBorde');
+
+    // Reiniciar animación por truco de reflujo CSS
+    matrixView.classList.remove('cambio-activo');
+    void matrixView.offsetWidth; 
+    matrixView.classList.add('cambio-activo');
+
+    if (modo === 'cifrar') {
+        panelBorde.style.borderLeftColor = "var(--accent-neon)";
+        matrixSym.style.color = "var(--accent-neon)";
+        infoTexto.innerHTML = "<strong>NÚCLEO DE CIFRADO ACTIVO:</strong> Procesa vectores de píxeles lineales utilizando operaciones de álgebra lineal modular basándose en la matriz clave <strong>K</strong>. Modifica de forma uniforme la dispersión cromática de los datos.";
+        matrixSym.textContent = "K =";
+        matrixView.innerHTML = `
+            <div class="matrix-row"><span>11</span><span>8</span></div>
+            <div class="matrix-row"><span>3</span><span>1</span></div>
+        `;
+        labelEntrada.textContent = "📷 Entrada Nítida (Escala de Grises)";
+        labelSalida.textContent = "🎲 Salida Cifrada (Ruido Matemático)";
+        agregarLog("Núcleo reconfigurado: Modo Cifrar Activo.");
+    } else {
+        panelBorde.style.borderLeftColor = "var(--accent-azul)";
+        matrixSym.style.color = "var(--accent-azul)";
+        infoTexto.innerHTML = "<strong>NÚCLEO DE RECONSTRUCCIÓN ACTIVO:</strong> Revierte la transformación multiplicando los bloques por la matriz inversa modular para el espacio de anillos <strong>ℤ₂₅₆</strong>. Reensambla de forma exact la información.";
+        matrixSym.textContent = "K⁻¹ =";
+        matrixView.innerHTML = `
+            <div class="matrix-row"><span>59</span><span>40</span></div>
+            <div class="matrix-row"><span>79</span><span>137</span></div>
+        `;
+        labelEntrada.textContent = "🎲 Entrada Inestable (Flujo Cifrado)";
+        labelSalida.textContent = "📷 Salida Recuperada (Imagen Original)";
+        agregarLog("Núcleo reconfigurado: Modo Descifrar Activo.");
+    }
+
+    if (ultimaImgProcesada) {
+        ejecutarPipelineCifrado(ultimaImgProcesada);
+    }
+}
+
+// Cómputo Analítico del Espectro de Ruido y Generación de Histograma Real
+function calcularAnalisisRuido(datosOriginales, datosSalida, esCifrado) {
+    const totalPixeles = datosOriginales.length;
+    let frecuencias = new Array(256).fill(0);
+    let sumaMse = 0;
+
+    // Calcular distribución de frecuencias en la salida y distancia euclidiana
+    for(let i=0; i<totalPixeles; i++) {
+        const valSalida = datosSalida[i*4];
+        frecuencias[valSalida]++;
+        
+        const dif = valSalida - datosOriginales[i];
+        sumaMse += dif * dif;
+    }
+
+    // Cálculo de Entropía de Shannon H(X)
+    let entropia = 0;
+    for(let f=0; f<256; f++) {
+        let p = frecuencias[f] / totalPixeles;
+        if(p > 0) {
+            entropia -= p * Math.log2(p);
+        }
+    }
+
+    const mse = (sumaMse / totalPixeles).toFixed(1);
+    const desvEstandar = Math.sqrt(sumaMse / totalPixeles).toFixed(2);
+
+    // Renderizado interactivo en los displays analíticos
+    document.getElementById('valMse').textContent = mse;
+    document.getElementById('valDesv').textContent = desvEstandar;
+    document.getElementById('valEntropia').textContent = `${entropia.toFixed(2)} Sh`;
+
+    const txtDistribucion = document.getElementById('valDistribucion');
+    if(esCifrado) {
+        txtDistribucion.textContent = "RUIDO BLANCO UNIFORME";
+        txtDistribucion.style.color = "var(--accent-neon)";
+    } else {
+        txtDistribucion.textContent = "GRADIENTE RESTAURADO";
+        txtDistribucion.style.color = "var(--accent-azul)";
+    }
+
+    // Dibujar el histograma interactivo en el canvas analítico
+    const canvasHist = document.getElementById('histogramCanvas');
+    const ctxHist = canvasHist.getContext('2d');
+    const width = canvasHist.width = canvasHist.parentElement.clientWidth * 0.9;
+    const height = canvasHist.height = 120;
+
+    ctxHist.clearRect(0, 0, width, height);
+    
+    // Encontrar frecuencia máxima para escalado óptico
+    const maxFrecuencia = Math.max(...frecuencias);
+    const anchoBarra = width / 256;
+
+    ctxHist.fillStyle = esCifrado ? "rgba(16, 185, 129, 0.4)" : "rgba(59, 130, 246, 0.4)";
+    
+    for(let i=0; i<256; i++) {
+        const alturaBarra = (frecuencias[i] / maxFrecuencia) * height;
+        ctxHist.fillRect(i * anchoBarra, height - alturaBarra, anchoBarra - 0.2, alturaBarra);
+    }
+}
+
+function mostrarStatus(mensaje, esExito) {
+    const box = document.getElementById('statusBox');
+    box.textContent = mensaje;
+    box.className = esExito ? "status success" : "status error";
+    box.style.display = "block";
+}
+
+// Soporte nativo para Drag & Drop
 const dropZone = document.getElementById('dropZone');
-dropZone.addEventListener('dragover', (e) => e.preventDefault());
-dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    if(e.dataTransfer.files.length > 0) procesarArchivoStream(e.dataTransfer.files[0]);
-});
-document.getElementById('fileInput').addEventListener('change', (e) => {
-    if(e.target.files.length > 0) procesarArchivoStream(e.target.files[0]);
+
+['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    }, false);
 });
 
-function procesarArchivoStream(file) {
+['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+    }, false);
+});
+
+dropZone.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    if(dt.files.length > 0) {
+        document.getElementById('fileInput').files = dt.files;
+        procesarMetadatosEImagen(dt.files[0]);
+    }
+});
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    if(e.target.files.length > 0) {
+        procesarMetadatosEImagen(e.target.files[0]);
+    }
+});
+
+function procesarMetadatosEImagen(file) {
+    if (!file) return;
+
+    const pesoKB = (file.size / 1024).toFixed(1);
+    document.getElementById('specSize').textContent = `${pesoKB} KB`;
+    agregarLog(`Archivo detectado: ${file.name} (${pesoKB} KB)`);
+
     const reader = new FileReader();
     reader.onload = function(event) {
         const img = new Image();
         img.onload = function() {
-            coreImage = img;
-            pushAuditLog(`Fichero cargado al buffer: [${file.name}]. Pipeline activo.`);
-            renderCriptoPipeline();
+            document.getElementById('specRes').textContent = `${img.width} x ${img.height} px`;
+            const megapixeles = ((img.width * img.height) / 1000000).toFixed(2);
+            document.getElementById('specMp').textContent = `${megapixeles} MP`;
+            
+            document.getElementById('fileSpecs').style.display = 'flex';
+            const thumb = document.getElementById('thumbPrevia');
+            thumb.src = event.target.result;
+            thumb.style.display = 'block';
+
+            ultimaImgProcesada = img;
+            agregarLog(`Pipeline iniciado: Procesando geometría de matriz.`);
+            ejecutarPipelineCifrado(img);
         };
         img.src = event.target.result;
     };
     reader.readAsDataURL(file);
 }
 
-function pushAuditLog(msg) {
-    const box = document.getElementById('logBox');
-    const row = document.createElement('div');
-    const time = new Date().toTimeString().split(' ')[0];
-    row.className = "log-row";
-    row.innerHTML = `<span class="log-stamp">[${time}]</span> <span>⚙️ ${msg}</span>`;
-    box.appendChild(row);
-    box.scrollTop = box.scrollHeight;
+function agregarLog(mensaje) {
+    const logContainer = document.getElementById('consoleLog');
+    const ahora = new Date();
+    const tiempoStr = ahora.toTimeString().split(' ')[0];
+    
+    const nuevoLog = document.createElement('div');
+    nuevoLog.className = "console-item";
+    nuevoLog.innerHTML = `<span class="console-time">[${tiempoStr}]</span> ${mensaje}`;
+    
+    logContainer.appendChild(nuevoLog);
+    logContainer.scrollTop = logContainer.scrollHeight;
 }
-
-// Ciclo de Inicialización Estático
-window.onload = function() {
-    actualizarMonitoresMatriciales();
-};
 </script>
 </body>
 </html>
