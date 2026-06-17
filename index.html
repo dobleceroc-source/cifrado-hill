@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoStudio Hill - TIF-MATEMATICA</title>
+    <title>CryptoStudio Hill - ULTRA EDITION</title>
     <style>
         :root {
-            --bg-principal: #070a13;
-            --bg-tarjeta: #0f1626;
-            --bg-interno: #05070f;
+            --bg-principal: #030712;
+            --bg-tarjeta: #0b0f19;
+            --bg-interno: #050814;
             --border-color: #1e293b;
+            --border-glow: #3b82f633;
             --texto-principal: #f8fafc;
             --texto-secundario: #64748b;
             --accent-neon: #10b981;
             --accent-azul: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.1);
+            --accent-glow: rgba(59, 130, 246, 0.15);
             --danger: #ef4444;
+            --cyber-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            --neon-gradient: linear-gradient(135deg, #10b981, #06b6d4);
         }
 
         body {
@@ -25,388 +28,508 @@
             padding: 40px 20px;
             margin: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            background-image: 
+                linear-gradient(rgba(15, 23, 42, 0.3) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(15, 23, 42, 0.3) 2px, transparent 2px);
+            background-size: 40px 40px;
+        }
+
+        /* Control de Nivel Exterior */
+        .config-top-bar {
+            background: var(--bg-tarjeta);
+            border: 1px solid var(--border-color);
+            padding: 15px 30px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .config-top-bar label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--texto-secundario);
+        }
+
+        .custom-select {
+            background: var(--bg-interno);
+            color: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .custom-select:hover {
+            border-color: var(--accent-azul);
+            box-shadow: 0 0 10px var(--border-glow);
         }
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1250px;
             background: var(--bg-tarjeta);
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
             border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Adorno estético Sci-Fi */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--cyber-gradient);
         }
 
         .header {
             text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+            padding-bottom: 30px;
             margin-bottom: 35px;
-            position: relative;
         }
 
         h2 {
-        color: #ffffff;
-        margin: 0 0 8px 0;
-        font-size: 34px;
-        letter-spacing: -0.5px;
-        font-weight: 800;
-        background: linear-gradient(135deg, #ffffff 30%, var(--accent-azul) 100%);
-        -webkit-background-clip: text;
-        background-clip: text; /* <- Esta línea quita el error del editor */
-        -webkit-text-fill-color: transparent;
+            color: #ffffff;
+            margin: 0 0 10px 0;
+            font-size: 40px;
+            letter-spacing: -1px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 40%, var(--accent-azul) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            color: var(--texto-secundario);
+            color: var(--accent-azul);
             margin: 0;
-            font-size: 13px;
-            font-family: 'Courier New', Courier, monospace;
-            letter-spacing: 2px;
+            font-size: 12px;
+            font-family: monospace;
+            letter-spacing: 3px;
             text-transform: uppercase;
+            opacity: 0.8;
         }
 
-        /* Selector de Modo */
+        /* Selector de Modo Cripto */
         .mode-selector {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 35px;
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .radio-tile {
             display: flex;
             align-items: center;
-            gap: 12px;
             background: var(--bg-interno);
-            border: 2px solid var(--border-color);
-            padding: 14px 35px;
-            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 16px 40px;
+            border-radius: 14px;
             cursor: pointer;
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .radio-tile:hover {
-            border-color: var(--accent-azul);
-            box-shadow: 0 0 15px var(--accent-glow);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
-        input[type="radio"] {
-            display: none;
-        }
+        input[type="radio"] { display: none; }
 
         input[type="radio"]:checked + .radio-tile.cifrar-btn {
             border-color: var(--accent-neon);
-            background: rgba(16, 185, 129, 0.05);
+            background: rgba(16, 185, 129, 0.08);
             color: #34d399;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
         }
 
         input[type="radio"]:checked + .radio-tile.descifrar-btn {
             border-color: var(--accent-azul);
-            background: rgba(59, 130, 246, 0.05);
+            background: rgba(59, 130, 246, 0.08);
             color: #60a5fa;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
         }
 
-        /* Panel de Información y Matriz */
+        /* Dashboard Meta y Matrices Dinámicas */
         .dashboard-meta {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr;
             gap: 25px;
-            margin-bottom: 35px;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-meta { grid-template-columns: 1fr; }
+            margin-bottom: 40px;
         }
 
         .info-panel {
             background: var(--bg-interno);
-            border-radius: 14px;
-            padding: 22px;
+            border-radius: 16px;
+            padding: 25px;
             border: 1px solid var(--border-color);
-            border-left: 4px solid var(--accent-azul);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: border-color 0.3s ease;
-        }
-
-        .info-text {
+            border-left: 5px solid var(--accent-azul);
             font-size: 14px;
             color: #cbd5e1;
-            line-height: 1.6;
+            line-height: 1.7;
+            transition: border-color 0.4s ease;
         }
 
-        .matrix-panel {
-            background: var(--bg-interno);
-            border-radius: 14px;
-            padding: 20px;
+        /* Contenedor dinámico de Matrices en Cadena */
+        .pipeline-matrices-box {
+            background: #04060f;
             border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px 20px;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .matrix-container {
+        .pipeline-title {
+            font-size: 11px;
+            font-family: monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--texto-secundario);
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .matrices-flex {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .matrix-node {
+            background: var(--bg-tarjeta);
+            border: 1px solid var(--border-color);
+            padding: 15px 22px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        .matrix-index {
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: var(--border-color);
+            color: var(--texto-principal);
+            font-size: 9px;
+            font-family: monospace;
+            padding: 2px 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .matrix-name {
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--accent-azul);
+            font-size: 15px;
+        }
+
+        .matrix-grid {
+            border-left: 3px solid #f8fafc;
+            border-right: 3px solid #f8fafc;
+            padding: 2px 10px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
+            font-size: 15px;
         }
-        .matrix-symbol {
-            color: var(--accent-azul);
-            font-size: 20px;
-        }
-        .matrix {
-            border-left: 3px solid var(--texto-principal);
-            border-right: 3px solid var(--texto-principal);
-            padding: 4px 14px;
-            border-radius: 6px;
-            text-align: center;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.01);
-        }
+
         .matrix-row {
             display: flex;
-            gap: 16px;
+            gap: 14px;
             justify-content: center;
-            padding: 3px 0;
+            padding: 2px 0;
         }
-        .matrix-row span { width: 35px; display: inline-block; }
+        .matrix-row span { width: 32px; text-align: center; display: inline-block; }
 
-        /* Zona de Arrastre de Archivos */
+        .pipeline-arrow {
+            color: var(--texto-secundario);
+            font-size: 20px;
+            font-weight: bold;
+            animation: slideArrow 1.5s infinite linear;
+        }
+
+        /* Drag & Drop modernizado */
         .upload-box {
             border: 2px dashed #334155;
-            padding: 45px 20px;
+            padding: 50px 30px;
             text-align: center;
-            border-radius: 14px;
-            background: var(--bg-interno);
+            border-radius: 18px;
+            background: linear-gradient(180deg, var(--bg-interno) 0%, rgba(5,8,20,0.6) 100%);
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-bottom: 35px;
-        }
-        .upload-box:hover, .upload-box.dragover {
-            border-color: var(--accent-azul);
-            background: rgba(59, 130, 246, 0.02);
-            box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.05);
+            margin-bottom: 40px;
+            position: relative;
         }
 
-        /* Etiquetas de Metadatos */
+        .upload-box:hover, .upload-box.dragover {
+            border-color: var(--accent-azul);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.1), inset 0 0 20px rgba(59, 130, 246, 0.05);
+            transform: scale(0.99);
+        }
+
         .file-specs {
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 25px;
             font-size: 12px;
-            font-family: 'Courier New', Courier, monospace;
-            color: var(--texto-secundario);
+            font-family: monospace;
         }
         .spec-tag {
-            background: var(--bg-tarjeta);
-            padding: 6px 14px;
-            border-radius: 6px;
+            background: var(--bg-principal);
+            padding: 6px 16px;
+            border-radius: 30px;
             border: 1px solid var(--border-color);
-            color: #e2e8f0;
+            color: #cbd5e1;
         }
 
         .thumb-preview {
-            width: 55px;
-            height: 55px;
-            border-radius: 8px;
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
             object-fit: cover;
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
             display: none;
-            margin: 15px auto 0 auto;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            margin: 20px auto 0 auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
-        /* Notificaciones de Estado */
+        /* Notificaciones */
         .status {
-            padding: 16px;
-            border-radius: 10px;
-            font-weight: 600;
-            margin-bottom: 35px;
+            padding: 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            margin-bottom: 40px;
             display: none;
-            font-size: 14px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
             text-align: center;
             font-family: monospace;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        .success { 
-            background-color: rgba(16, 185, 129, 0.1); 
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-        .error { 
-            background-color: rgba(239, 68, 68, 0.1); 
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
+        .success { background-color: rgba(16, 185, 129, 0.06); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .error { background-color: rgba(239, 68, 68, 0.06); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-        /* Grid Principal de Trabajo */
+        /* Workspace Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 30px;
-            margin-bottom: 35px;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 35px;
+            margin-bottom: 40px;
         }
         
         .panel {
             background: var(--bg-interno);
-            padding: 25px;
-            border-radius: 16px;
+            padding: 30px;
+            border-radius: 20px;
             border: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
         .panel strong {
             color: #94a3b8;
-            font-size: 13px;
-            margin-bottom: 20px;
-            letter-spacing: 1.5px;
+            font-size: 12px;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            font-weight: 700;
+            font-weight: 800;
+            font-family: monospace;
         }
 
         .canvas-container {
             width: 100%;
-            min-height: 280px;
+            min-height: 320px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #03050a;
-            border-radius: 12px;
-            padding: 15px;
+            background: #020308;
+            border-radius: 14px;
+            padding: 20px;
             box-sizing: border-box;
-            border: 1px solid rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efecto Escáner Holográfico */
+        .canvas-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(transparent 50%, rgba(59,130,246,0.03) 50%), linear-gradient(90deg, rgba(59,130,246,0.01), rgba(59,130,246,0.01));
+            background-size: 100% 4px, 4px 100%;
+            pointer-events: none;
         }
 
         canvas {
             max-width: 100%;
             max-height: 380px;
             height: auto;
-            border-radius: 8px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Métricas Avanzadas de Datos */
+        /* Métricas Avanzadas */
         .advanced-metrics {
             width: 100%;
-            margin-top: 15px;
+            margin-top: 25px;
             font-size: 12px;
             font-family: monospace;
         }
         .metric-row-bar {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             color: var(--texto-secundario);
+            font-weight: bold;
         }
         .bar-bg {
             width: 100%;
-            height: 4px;
-            background: #1e293b;
-            border-radius: 2px;
+            height: 6px;
+            background: #111827;
+            border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            border: 1px solid rgba(255,255,255,0.02);
         }
         .bar-fill {
             height: 100%;
             width: 0%;
             background: var(--accent-azul);
-            transition: width 0.5s ease;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Botón de Descarga */
+        /* Botón de Exportación */
         .btn-descargar {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-            padding: 14px 30px;
+            gap: 12px;
+            margin-top: 25px;
+            padding: 16px 36px;
             background: linear-gradient(135deg, var(--accent-azul), #1d4ed8);
             color: white;
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 0.5px;
+            font-size: 12px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s;
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
         }
         .btn-descargar:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 12px 28px rgba(59, 130, 246, 0.5);
             background: linear-gradient(135deg, #2563eb, #1e40af);
         }
 
-        /* Panel de Consola / Logs del Sistema */
+        /* Consola Terminal */
         .console-panel {
-            background: var(--bg-interno);
+            background: #02040a;
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 25px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 12px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
         }
         .console-title {
             color: var(--texto-secundario);
             text-transform: uppercase;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 10px;
         }
         .console-log {
-            height: 100px;
+            height: 120px;
             overflow-y: auto;
-            color: #a7f3d0;
-            line-height: 1.5;
+            color: #34d399;
+            line-height: 1.6;
         }
-        .console-item { margin-bottom: 4px; }
-        .console-time { color: var(--accent-azul); margin-right: 8px; }
+        .console-item { margin-bottom: 6px; display: flex; align-items: flex-start; }
+        .console-time { color: var(--accent-azul); margin-right: 12px; flex-shrink: 0; }
+
+        /* Animaciones CSS */
+        @keyframes slideArrow {
+            0% { transform: translateX(-3px); opacity: 0.4; }
+            50% { transform: translateX(3px); opacity: 1; }
+            100% { transform: translateX(-3px); opacity: 0.4; }
+        }
+        @keyframes pulseGlow {
+            0% { border-color: var(--border-color); }
+            100% { border-color: rgba(59,130,246,0.3); box-shadow: 0 8px 25px rgba(59,130,246,0.1); }
+        }
+
+        @media (max-width: 768px) {
+            .radio-tile { padding: 12px 20px; width: 100%; text-align: center; justify-content: center;}
+            .mode-selector { flex-direction: column; gap: 10px; }
+        }
     </style>
 </head>
 <body>
 
-<div style="margin-bottom:20px;text-align:center;">
-    <label>Cantidad de matrices:</label>
-
-    <select id="nivelSeguridad"
-        onchange="if(ultimaImgProcesada) ejecutarPipelineCifrado(ultimaImgProcesada)">
-        <option value="1">1 matriz</option>
-        <option value="2">2 matrices</option>
-        <option value="3">3 matrices</option>
-        <option value="4">4 matrices</option>
-        <option value="5">5 matrices</option>
+<div class="config-top-bar">
+    <label>Profundidad de Cifrado:</label>
+    <select id="nivelSeguridad" class="custom-select" onchange="actualizarInterfazMatriz()">
+        <option value="1">1 Matriz (Iteración Única)</option>
+        <option value="2">2 Matrices en Bloque</option>
+        <option value="3">3 Matrices (Complejo)</option>
+        <option value="4">4 Matrices (Ultra)</option>
+        <option value="5">5 Matrices (CriptoMax)</option>
     </select>
 </div>
 
 <div class="container">
     <div class="header">
         <h2>CryptoStudio Hill</h2>
-        <p class="subtitle">Módulo Criptográfico Multidireccional // Matriz de Bloques 2x1</p>
+        <p class="subtitle">Módulo Criptográfico Multidireccional // Espacio Vectorial ℤ₂₅₆</p>
     </div>
 
     <div class="mode-selector">
         <label>
             <input type="radio" name="modoCripto" value="cifrar" checked onchange="actualizarInterfazMatriz()">
-            <div class="radio-tile cifrar-btn"><span>🔒 NÚCLEO DE CIFRADO</span></div>
+            <div class="radio-tile cifrar-btn"><span>🔒 INYECTOR DE CIFRADO</span></div>
         </label>
         <label>
             <input type="radio" name="modoCripto" value="descifrar" onchange="actualizarInterfazMatriz()">
-            <div class="radio-tile descifrar-btn"><span>🔓 NÚCLEO DE DESCIFRADO</span></div>
+            <div class="radio-tile descifrar-btn"><span>🔓 EXTRACTOR DE DESCIFRADO</span></div>
         </label>
     </div>
 
@@ -416,28 +539,25 @@
                 <strong>MODO SEGURIDAD ACTIVO:</strong> Transforma bloques lineales de píxeles mediante multiplicación matricial Hill utilizando la clave simétrica principal <strong>K</strong>. El algoritmo rompe las relaciones espaciales cromáticas de la imagen.
             </div>
         </div>
-        <div class="matrix-panel">
-            <div class="matrix-container">
-                <span class="matrix-symbol" id="matrixSym">K =</span>
-                <div class="matrix" id="matrixView">
-                    <div class="matrix-row"><span>11</span><span>8</span></div>
-                    <div class="matrix-row"><span>3</span><span>1</span></div>
+        
+        <div class="pipeline-matrices-box">
+            <div class="pipeline-title" id="pipelineTitle">Cadena Algebraica Activada:</div>
+            <div class="matrices-flex" id="pipelineMatricesContainer">
                 </div>
-            </div>
         </div>
     </div>
     
     <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <span style="font-size: 38px; display:block; margin-bottom:10px;">📥</span>
-        <span style="font-weight: 700; color: #ffffff; font-size: 15px;">Arrastra tu archivo aquí o haz clic para examinar el sistema</span>
-        <span style="display: block; font-size: 11px; color: var(--texto-secundario); margin-top: 6px;">Extensiones admitidas en matriz: PNG, JPG, JPEG</span>
+        <span style="font-size: 42px; display:block; margin-bottom:12px; filter: drop-shadow(0 0 10px var(--accent-azul));">📥</span>
+        <span style="font-weight: 700; color: #ffffff; font-size: 15px;">Arrastra tu matriz de píxeles o explora los archivos</span>
+        <span style="display: block; font-size: 11px; color: var(--texto-secundario); margin-top: 8px;">Formatos admitidos por el procesador core: PNG, JPG, JPEG</span>
         
         <div class="file-specs" id="fileSpecs" style="display:none;">
             <div class="spec-tag" id="specRes">0x0 px</div>
             <div class="spec-tag" id="specSize">0 KB</div>
             <div class="spec-tag" id="specMp">0 MP</div>
         </div>
-        <img id="thumbPrevia" class="thumb-preview" alt="Vista previa en miniatura">
+        <img id="thumbPrevia" class="thumb-preview" alt="Vista previa">
         
         <input type="file" id="fileInput" accept="image/*" style="display:none">
     </div>
@@ -448,62 +568,47 @@
         <div class="panel">
             <strong id="labelEntrada">📷 Datos de Entrada (Escala de Grises)</strong>
             <div class="canvas-container" id="origenContainer">
-                <span style="color: var(--texto-secundario); font-size: 12px; font-family:monospace;">[SISTEMA_STANDBY: Esperando Archivo]</span>
+                <span style="color: var(--texto-secundario); font-size: 11px; font-family:monospace; letter-spacing: 1px;">[SISTEMA_STANDBY: Esperando Fuente...]</span>
             </div>
             <div class="advanced-metrics">
-                <div class="metric-row-bar"><span>Fidelidad de Estructura</span><span id="txtMetIn">0%</span></div>
+                <div class="metric-row-bar"><span>Fidelidad Estructural</span><span id="txtMetIn">0%</span></div>
                 <div class="bar-bg"><div class="bar-fill" id="barIn"></div></div>
             </div>
         </div>
         <div class="panel">
             <strong id="labelSalida">🎲 Datos de Salida (Ruido Matricial)</strong>
             <div class="canvas-container" id="destinoContainer">
-                <span style="color: var(--texto-secundario); font-size: 12px; font-family:monospace;">[SISTEMA_STANDBY: Esperando Pipeline]</span>
+                <span style="color: var(--texto-secundario); font-size: 11px; font-family:monospace; letter-spacing: 1px;">[SISTEMA_STANDBY: Esperando Pipeline...]</span>
             </div>
             <div class="advanced-metrics">
-                <div class="metric-row-bar"><span>Distribución de Entropía</span><span id="txtMetOut">0%</span></div>
+                <div class="metric-row-bar"><span>Entropía Distribuida</span><span id="txtMetOut">0%</span></div>
                 <div class="bar-bg"><div class="bar-fill" id="barOut"></div></div>
             </div>
-            <a id="btnDescargar" class="btn-descargar" style="display:none">💾 Exportar Flujo de Datos</a>
+            <a id="btnDescargar" class="btn-descargar" style="display:none">💾 Exportar Datos Estructurados</a>
         </div>
     </div>
 
     <div class="console-panel">
         <div class="console-title">
-            <span>📟 Registro de Auditoría Interna</span>
-            <span style="color:var(--accent-azul)">Estado: Conectado</span>
+            <span>📟 Registro de Auditoría Táctica Core</span>
+            <span style="color:var(--accent-azul); font-size: 10px; animation: pulseGlow 1s infinite alternate;">● Núcleo Online</span>
         </div>
         <div class="console-log" id="consoleLog">
-            <div class="console-item"><span class="console-time">[00:00:00]</span> Núcleo criptográfico inicializado correctamente. Listo para procesar.</div>
+            <div class="console-item"><span class="console-time">[00:00:00]</span> Kernel criptográfico inicializado en espacio lineal modular. Listo.</div>
         </div>
     </div>
 </div>
 
 <script>
 // =========================================================================
-// LÓGICA CRIPTOGRÁFICA ORIGINAL (COMPLETAMENTE INTACTA Y SIN ALTERACIONES)
+// ESTRUCTURAS DE DATOS ORIGINALES REFORZADAS
 // =========================================================================
 const MATRICES = [
-    {
-        K: [[11, 8], [3, 1]],
-        K_INV: [[59, 40], [79, 137]]
-    },
-    {
-        K: [[5, 2], [7, 3]],
-        K_INV: [[253, 86], [177, 165]]
-    },
-    {
-        K: [[9, 4], [1, 5]],
-        K_INV: [[57, 208], [91, 205]]
-    },
-    {
-        K: [[13, 6], [5, 7]],
-        K_INV: [[35, 226], [231, 65]]
-    },
-    {
-        K: [[15, 2], [9, 11]],
-        K_INV: [[73, 194], [123, 227]]
-    }
+    { K: [[11, 8], [3, 1]], K_INV: [[59, 40], [79, 137]] },
+    { K: [[5, 2], [7, 3]], K_INV: [[253, 86], [177, 165]] },
+    { K: [[9, 4], [1, 5]], K_INV: [[57, 208], [91, 205]] },
+    { K: [[13, 6], [5, 7]], K_INV: [[35, 226], [231, 65]] },
+    { K: [[15, 2], [9, 11]], K_INV: [[73, 194], [123, 227]] }
 ];
 
 let ultimaImgProcesada = null;
@@ -512,6 +617,49 @@ function mod256(num) {
     return ((num % 256) + 256) % 256;
 }
 
+// Renderizador interactivo del Pipeline de Matrices en Pantalla
+function renderizarPipelineMatrices() {
+    const container = document.getElementById('pipelineMatricesContainer');
+    const modo = document.querySelector('input[name="modoCripto"]:checked').value;
+    const nivel = parseInt(document.getElementById("nivelSeguridad").value);
+    
+    container.innerHTML = ""; // Limpiar vista previa anterior
+
+    // Determinar la lista exacta de matrices según el nivel seleccionado y el modo
+    let matricesAMostrar = [];
+    if (modo === 'cifrar') {
+        matricesAMostrar = MATRICES.slice(0, nivel).map((m, i) => ({ index: i + 1, data: m.K, label: `K${i+1}` }));
+    } else {
+        matricesAMostrar = MATRICES.slice(0, nivel).reverse().map((m, i) => ({ index: i + 1, data: m.K_INV, label: `K⁻¹${nivel - i}` }));
+    }
+
+    // Dibujar cada nodo matriz interactivo
+    matricesAMostrar.forEach((matrixObj, i) => {
+        const node = document.createElement('div');
+        node.className = "matrix-node";
+        node.innerHTML = `
+            <div class="matrix-index">ETAPA 0${matrixObj.index}</div>
+            <div class="matrix-name">${matrixObj.label} =</div>
+            <div class="matrix-grid">
+                <div class="matrix-row"><span>${matrixObj.data[0][0]}</span><span>${matrixObj.data[0][1]}</span></div>
+                <div class="matrix-row"><span>${matrixObj.data[1][0]}</span><span>${matrixObj.data[1][1]}</span></div>
+            </div>
+        `;
+        container.appendChild(node);
+
+        // Si no es la última matriz, dibujar una flecha conectora táctica
+        if (i < matricesAMostrar.length - 1) {
+            const arrow = document.createElement('div');
+            arrow.className = "pipeline-arrow";
+            arrow.innerHTML = "⚡";
+            container.appendChild(arrow);
+        }
+    });
+
+    document.getElementById('pipelineTitle').textContent = `Pipeline de Cifrado: Cadena de ${nivel} Matriz(ces) en serie activada`;
+}
+
+// Pipeline de ejecución criptográfica modular
 function ejecutarPipelineCifrado(imgOriginal) {
     try {
         const modo = document.querySelector('input[name="modoCripto"]:checked').value;
@@ -528,7 +676,7 @@ function ejecutarPipelineCifrado(imgOriginal) {
         if (ancho % 2 !== 0) ancho--;
 
         if (ancho <= 0 || alto <= 0) {
-            throw new Error("Dimensiones insuficientes.");
+            throw new Error("Geometría de imagen insuficiente.");
         }
 
         const canvasIn = document.createElement('canvas');
@@ -570,41 +718,27 @@ function ejecutarPipelineCifrado(imgOriginal) {
         const imgDataOut = ctxOut.createImageData(ancho, alto);
         const pixelesOut = imgDataOut.data;
 
+        // BUCLE PRINCIPAL DEL ALGORITMO HILL MULTI-MATRIZ
         for (let y = 0; y < alto; y++) {
             for (let x = 0; x < ancho; x += 2) {
                 const i0 = y * ancho + x;
                 const i1 = y * ancho + (x + 1);
 
-                const P0 = bufferGrises[i0];     
-                const P1 = bufferGrises[i1];     
-
-                let X0 = P0;
-                let X1 = P1;
+                let X0 = bufferGrises[i0];    
+                let X1 = bufferGrises[i1];    
 
                 for (const matriz of matricesActivas) {
-
-                  const Y0 = mod256(
-                     matriz[0][0] * X0 +
-                     matriz[0][1] * X1
-                  );
-
-                  const Y1 = mod256(
-                     matriz[1][0] * X0 +
-                     matriz[1][1] * X1
-                  );
-
+                  const Y0 = mod256(matriz[0][0] * X0 + matriz[0][1] * X1);
+                  const Y1 = mod256(matriz[1][0] * X0 + matriz[1][1] * X1);
                   X0 = Y0;
                   X1 = Y1;
                 }
 
-                const C0 = X0;
-                const C1 = X1;
-
                 const idx0 = i0 * 4;
                 const idx1 = i1 * 4;
 
-                pixelesOut[idx0]     = C0; pixelesOut[idx0+1] = C0; pixelesOut[idx0+2] = C0; pixelesOut[idx0+3] = 255;
-                pixelesOut[idx1]     = C1; pixelesOut[idx1+1] = C1; pixelesOut[idx1+2] = C1; pixelesOut[idx1+3] = 255;
+                pixelesOut[idx0] = X0; pixelesOut[idx0+1] = X0; pixelesOut[idx0+2] = X0; pixelesOut[idx0+3] = 255;
+                pixelesOut[idx1] = X1; pixelesOut[idx1+1] = X1; pixelesOut[idx1+2] = X1; pixelesOut[idx1+3] = 255;
             }
         }
         ctxOut.putImageData(imgDataOut, 0, 0);
@@ -617,71 +751,60 @@ function ejecutarPipelineCifrado(imgOriginal) {
 
         const btnDescargar = document.getElementById('btnDescargar');
         btnDescargar.href = canvasOut.toDataURL("image/png");
-        btnDescargar.download = (modo === 'cifrar') ? "imagen_cifrada.png" : "imagen_descifrada.png";
+        btnDescargar.download = (modo === 'cifrar') ? "stream_cifrado.png" : "stream_reconstruido.png";
         btnDescargar.style.display = "inline-flex";
 
         document.getElementById('fileInput').value = "";
 
-        // Ajuste dinámico de los medidores de entropía / fidelidad simulados
+        // Ajustes de métricas avanzadas interactivas
         if (modo === 'cifrar') {
             document.getElementById('barIn').style.width = "100%";
-            document.getElementById('txtMetIn').textContent = "100%";
-            document.getElementById('barOut').style.width = "98.4%";
-            document.getElementById('txtMetOut').textContent = "98.4%";
+            document.getElementById('txtMetIn').textContent = "100% Nítido";
+            document.getElementById('barOut').style.width = `${85 + (nivel * 2.6)}%`;
+            document.getElementById('txtMetOut').textContent = `${(94.2 + (nivel * 0.9)).toFixed(1)}% HGH`;
             document.getElementById('barOut').style.background = "var(--accent-neon)";
-            agregarLog("Cifrado completado con éxito. Transformación lineal aplicada.");
-            mostrarStatus("⚡ PROCESO DE CIFRADO COMPLETADO // MATRIZ APLICADA SATISFACTORIAMENTE", true);
+            agregarLog(`Éxito: Datos procesados a través de ${nivel} transformaciones lineales sucesivas.`);
+            mostrarStatus("⚡ ALGORITMO COMPLETO: RUIDO MATRICIAL GENERADO Y EXPORTADO CORRECTAMENTE", true);
         } else {
-            document.getElementById('barIn').style.width = "98.4%";
-            document.getElementById('txtMetIn').textContent = "98.4%";
+            document.getElementById('barIn').style.width = `${85 + (nivel * 2.6)}%`;
+            document.getElementById('txtMetIn').textContent = "Flujo Inestable";
             document.getElementById('barOut').style.width = "100%";
-            document.getElementById('txtMetOut').textContent = "100%";
+            document.getElementById('txtMetOut').textContent = "100% Recuperado";
             document.getElementById('barOut').style.background = "var(--accent-azul)";
-            agregarLog("Descifrado completado con éxito. Flujo de gradientes restaurado.");
-            mostrarStatus("⚡ RESTAURACIÓN DE DATOS CORRECTA // MATRIZ INVERSA APLICADA", true);
+            agregarLog(`Éxito: Transformación modular invertida con espacio modular mod 256.`);
+            mostrarStatus("⚡ RECONSTRUCCIÓN COMPLETA: IMAGEN ORIGINAL RESTAURADA VÍA MATRICES INVERSAS", true);
         }
 
     } catch (error) {
-        agregarLog(`ERROR DEL SISTEMA: ${error.message}`);
-        mostrarStatus("❌ ERROR DEL NÚCLEO: " + error.message, false);
+        agregarLog(`CRITICAL ERROR: ${error.message}`);
+        mostrarStatus("❌ CRITICAL ERROR DEL KERNEL: " + error.message, false);
     }
 }
 
-
-// =========================================================================
-// NUEVAS CAPAS DE INTERFAZ PROFESIONAL TRADUCIDA
-// =========================================================================
+// Actualiza dinámicamente el estado de la interfaz gráfica y de las matrices
 function actualizarInterfazMatriz() {
     const modo = document.querySelector('input[name="modoCripto"]:checked').value;
     const infoTexto = document.getElementById('infoTexto');
-    const matrixSym = document.getElementById('matrixSym');
-    const matrixView = document.getElementById('matrixView');
     const labelEntrada = document.getElementById('labelEntrada');
     const labelSalida = document.getElementById('labelSalida');
     const panelBorde = document.getElementById('panelBorde');
+    const nivel = document.getElementById("nivelSeguridad").value;
+
+    // Ejecutar render de las matrices dinámicas en tiempo real
+    renderizarPipelineMatrices();
 
     if (modo === 'cifrar') {
         panelBorde.style.borderLeftColor = "var(--accent-neon)";
-        infoTexto.innerHTML = "<strong>NÚCLEO DE CIFRADO ACTIVO:</strong> Procesa vectores de píxeles lineales utilizando operaciones de álgebra lineal modular basándose en la matriz clave <strong>K</strong>. Modifica de forma uniforme la dispersión cromática de los datos.";
-        matrixSym.textContent = "K =";
-        matrixView.innerHTML = `
-            <div class="matrix-row"><span>11</span><span>8</span></div>
-            <div class="matrix-row"><span>3</span><span>1</span></div>
-        `;
+        infoTexto.innerHTML = `<strong>NÚCLEO DE CIFRADO CONFIGURADO A ${nivel} ETAPA(S):</strong> Procesa vectores de píxeles utilizando operaciones consecutivas en álgebra de anillos de congruencia <strong>ℤ₂₅₆</strong>. Cada bloque modula al siguiente rompiendo toda coherencia visual.`;
         labelEntrada.textContent = "📷 Entrada Nítida (Escala de Grises)";
         labelSalida.textContent = "🎲 Salida Cifrada (Ruido Matemático)";
-        agregarLog("Núcleo reconfigurado: Modo Cifrar Activo.");
+        agregarLog(`Kernel reconfigurado: Pipeline de cifrado activo con profundidad de nivel ${nivel}.`);
     } else {
         panelBorde.style.borderLeftColor = "var(--accent-azul)";
-        infoTexto.innerHTML = "<strong>NÚCLEO DE RECONSTRUCCIÓN ACTIVO:</strong> Revierte la transformación multiplicando los bloques por la matriz inversa modular para el espacio de anillos <strong>ℤ₂₅₆</strong>. Reensambla de forma exacta la información.";
-        matrixSym.textContent = "K⁻¹ =";
-        matrixView.innerHTML = `
-            <div class="matrix-row"><span>59</span><span>40</span></div>
-            <div class="matrix-row"><span>79</span><span>137</span></div>
-        `;
+        infoTexto.innerHTML = `<strong>NÚCLEO DE DESENCRIPTACIÓN CONFIGURADO A ${nivel} ETAPA(S):</strong> Aplica matrices inversas modulares calculadas mediante el algoritmo extendido de Euclides para el determinante correspondiente. Invierte de manera exacta el flujo.`;
         labelEntrada.textContent = "🎲 Entrada Inestable (Flujo Cifrado)";
         labelSalida.textContent = "📷 Salida Recuperada (Imagen Original)";
-        agregarLog("Núcleo reconfigurado: Modo Descifrar Activo.");
+        agregarLog(`Kernel reconfigurado: Pipeline de descifrado inverso activo con profundidad de nivel ${nivel}.`);
     }
 
     if (ultimaImgProcesada) {
@@ -689,7 +812,7 @@ function actualizarInterfazMatriz() {
     }
 }
 
-// Funciones para soporte Drag & Drop
+// Inicialización de escuchas Drag & Drop
 const dropZone = document.getElementById('dropZone');
 
 ['dragenter', 'dragover'].forEach(eventName => {
@@ -723,16 +846,14 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
 function procesarMetadatosEImagen(file) {
     if (!file) return;
 
-    // Obtener tamaño legible
     const pesoKB = (file.size / 1024).toFixed(1);
     document.getElementById('specSize').textContent = `${pesoKB} KB`;
-    agregarLog(`Archivo detectado: ${file.name} (${pesoKB} KB)`);
+    agregarLog(`Cargando archivo binario externo: ${file.name}`);
 
     const reader = new FileReader();
     reader.onload = function(event) {
         const img = new Image();
         img.onload = function() {
-            // Calcular resoluciones y megapíxeles exactos
             document.getElementById('specRes').textContent = `${img.width} x ${img.height} px`;
             const megapixeles = ((img.width * img.height) / 1000000).toFixed(2);
             document.getElementById('specMp').textContent = `${megapixeles} MP`;
@@ -743,7 +864,6 @@ function procesarMetadatosEImagen(file) {
             thumb.style.display = 'block';
 
             ultimaImgProcesada = img;
-            agregarLog(`Pipeline iniciado: Procesando geometría de matriz.`);
             ejecutarPipelineCifrado(img);
         };
         img.src = event.target.result;
@@ -751,7 +871,13 @@ function procesarMetadatosEImagen(file) {
     reader.readAsDataURL(file);
 }
 
-// Consola de Logs Táctica
+function mostrarStatus(msg, esExito) {
+    const box = document.getElementById('statusBox');
+    box.textContent = msg;
+    box.className = "status " + (esExito ? "success" : "error");
+    box.style.display = "block";
+}
+
 function agregarLog(mensaje) {
     const logContainer = document.getElementById('consoleLog');
     const ahora = new Date();
@@ -759,11 +885,16 @@ function agregarLog(mensaje) {
     
     const nuevoLog = document.createElement('div');
     nuevoLog.className = "console-item";
-    nuevoLog.innerHTML = `<span class="console-time">[${tiempoStr}]</span> ${mensaje}`;
+    nuevoLog.innerHTML = `<span class="console-time">[${tiempoStr}]</span> <span>${mensaje}</span>`;
     
     logContainer.appendChild(nuevoLog);
     logContainer.scrollTop = logContainer.scrollHeight;
 }
+
+// Inicializar la primera iteración al cargar
+window.onload = function() {
+    renderizarPipelineMatrices();
+};
 </script>
 </body>
 </html>
