@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoStudio Hill v7 - TIF-MATEMATICA</title>
+    <title>CryptoStudio Hill v7 - Documentación Integrada</title>
     <style>
         :root {
             --bg-principal: #070a13;
@@ -639,18 +639,36 @@
 
 <script>
 const MATRICES = [
-    { K: [[11, 8], [3, 1]],   K_INV: [[59, 40], [79, 137]] },
-    { K: [[5, 2], [7, 3]],    K_INV: [[253, 86], [177, 165]] },
-    { K: [[9, 4], [1, 5]],    K_INV: [[57, 208], [91, 205]] },
-    { K: [[13, 6], [5, 7]],   K_INV: [[35, 226], [231, 65]] },
-    { K: [[15, 2], [9, 11]],  K_INV: [[73, 194], [123, 227]] },
-    { K: [[15, 3], [1, 4]],   K_INV: [[36, 229], [247, 135]] },
-    { K: [[1, 11], [1, 10]],  K_INV: [[246, 11], [1, 255]] },
-    { K: [[5, 12], [5, 9]],   K_INV: [[153, 52], [171, 85]] },
-    { K: [[15, 4], [4, 11]],  K_INV: [[31, 12], [12, 19]] },
-    { K: [[1, 8], [1, 9]],    K_INV: [[9, 248], [255, 1]] }
-];
+    // 1. Det = 1, Det_INV = 1
+    { K: [[2, 3], [1, 2]], K_INV: [[2, 253], [255, 2]] },
 
+    // 2. Det = 1, Det_INV = 1
+    { K: [[3, 5], [1, 2]], K_INV: [[2, 251], [255, 3]] },
+
+    // 3. Det = 1, Det_INV = 1
+    { K: [[4, 7], [1, 2]], K_INV: [[2, 249], [255, 4]] },
+
+    // 4. Det = 3, Det_INV = 171
+    { K: [[3, 2], [3, 5]], K_INV: [[9, 114], [85, 43]] },
+
+    // 5. Det = 5, Det_INV = 205
+    { K: [[4, 3], [1, 2]], K_INV: [[154, 25], [61, 51]] },
+
+    // 6. Det = 7, Det_INV = 111
+    { K: [[5, 2], [4, 3]], K_INV: [[77, 129], [152, 239]] },
+
+    // 7. Det = 9, Det_INV = 57
+    { K: [[5, 1], [1, 2]], K_INV: [[114, 57], [57, 28]] },
+
+    // 8. Det = 11, Det_INV = 163
+    { K: [[4, 1], [1, 3]], K_INV: [[233, 93], [93, 54]] },
+
+    // 9. CORREGIDO: Sintaxis de array interno arreglada [[79, 18], [9, 140]]
+    { K: [[5, 4], [2, 3]], K_INV: [[79, 18], [9, 140]] },
+
+    // 10. Det = 15, Det_INV = 17
+    { K: [[6, 1], [3, 3]], K_INV: [[51, 239], [205, 102]] }
+];
 let ultimaImgProcesada = null;
 
 function mod256(num) {
@@ -678,8 +696,11 @@ function ejecutarPipelineCifrado(imgOriginal) {
         let bufferCanal = new Uint8ClampedArray(ancho * alto);
         for (let i = 0; i < bufferCanal.length; i++) {
             const idx = i * 4;
-            if (modo === 'descifrar') { bufferCanal[i] = pixelesIn[idx]; }
-            else { bufferCanal[i] = Math.floor(0.299 * pixelesIn[idx] + 0.587 * pixelesIn[idx+1] + 0.114 * pixelesIn[idx+2]); }
+            if (modo === 'descifrar') { 
+                bufferCanal[i] = pixelesIn[idx]; 
+            } else { 
+                bufferCanal[i] = Math.floor(0.299 * pixelesIn[idx] + 0.587 * pixelesIn[idx+1] + 0.114 * pixelesIn[idx+2]); 
+            }
         }
 
         for (let i = 0; i < bufferCanal.length; i++) {
@@ -781,7 +802,6 @@ function analizarEspectrosSeparados(pixIn, pixOut, esCifrado, nivel) {
     const desvOrig = Math.sqrt(varOrig / total); const desvProc = Math.sqrt(varProc / total);
     const mse = sumaMse / total;
     
-    // APLICACIÓN DEL REQUERIMIENTO: VALOR ABSOLUTO PARA MEDIR INTENSIDAD DEL IMPACTO NETO
     const deltaVarianza = Math.abs(((desvProc - desvOrig) / (desvOrig || 1)) * 100).toFixed(1);
 
     document.getElementById('valMse').textContent = mse.toFixed(1);
@@ -799,7 +819,6 @@ function analizarEspectrosSeparados(pixIn, pixOut, esCifrado, nivel) {
         txtVeredicto.innerHTML = nivel >= 5 ? `Espectro de Ruido Blanco Perfecto <span>Alta Entropía Shanon</span>` : `Dispersión Geométrica en Proceso <span>Entropía Intermedia</span>`;
     } else { txtVeredicto.innerHTML = `Estructura Reconstituida Correctamente <span>Simetría Pura</span>`; }
 
-    // Canvas Izquierdo
     const cOrig = document.getElementById('histOriginalCanvas'); const ctxO = cOrig.getContext('2d');
     const wO = cOrig.width = cOrig.parentElement.clientWidth; const hO = cOrig.height = 160;
     ctxO.clearRect(0,0,wO,hO);
@@ -808,7 +827,6 @@ function analizarEspectrosSeparados(pixIn, pixOut, esCifrado, nivel) {
     ctxO.fillStyle = gradO;
     for(let i=0; i<256; i++) { const alt = (frecOrig[i] / (maxO || 1)) * (hO - 20); ctxO.fillRect(i * anchoBarraO, hO - alt, anchoBarraO - 0.5, alt); }
 
-    // Canvas Derecho
     const cProc = document.getElementById('histProcesadoCanvas'); const ctxP = cProc.getContext('2d');
     const wP = cProc.width = cProc.parentElement.clientWidth; const hP = cProc.height = 160;
     ctxP.clearRect(0,0,wP,hP);
@@ -832,33 +850,47 @@ function actualizarInterfazMatriz() {
 
     if(modo === 'cifrar') {
         panelBorde.style.borderLeftColor = "var(--accent-neon)"; legendDotProc.style.background = "linear-gradient(90deg, #10b981, transparent)";
-        infoTexto.innerHTML = `<strong>MODO CASCADA AVANZADO (Nivel ${indiceNivel+1}):</strong> La señal de píxeles viaja secuencialmente a través de las ${indiceNivel+1} matrices expuestas abajo de izquierda a derecha. Cada capa diluye geométricamente la estructura anterior.`;
+        infoTexto.innerHTML = `<strong>MODO CASCADA AVANZADO (Nivel ${indiceNivel+1}):</strong> La señal de píxeles viaja secuencialmente a través de las ${indiceNivel+1} matrices de izquierda a derecha.`;
         document.getElementById('cascadeTitle').innerHTML = `⛓️ Línea de Cifrado Progresivo Directo (${indiceNivel+1} Matrices en cadena):`;
+
+        for (let paso = 0; paso <= indiceNivel; paso++) {
+            agregarNodoMatrizVisual(paso, modo);
+            if (paso < indiceNivel) agregarFlechaSeparadora();
+        }
     } else {
         panelBorde.style.borderLeftColor = "var(--accent-azul)"; legendDotProc.style.background = "linear-gradient(90deg, #f59e0b, transparent)";
-        infoTexto.innerHTML = `<strong>MODO DESCOPLAMIENTO REVERSO (Nivel ${indiceNivel+1}):</strong> Para recuperar los datos nativos, el descifrador aplica las matrices inversas en orden estrictamente inverso (de derecha a izquierda, empezando por la última capa inyectada $K_{${indiceNivel+1}}^{-1}$).`;
+        infoTexto.innerHTML = `<strong>MODO DESACOPLAMIENTO REVERSO (Nivel ${indiceNivel+1}):</strong> El descifrador aplica las matrices inversas de derecha a izquierda, empezando por la última capa activa $K_{${indiceNivel+1}}^{-1}$.`;
         document.getElementById('cascadeTitle').innerHTML = `⛓️ Pipeline de Descifrado Simétrico Inverso (Orden Crítico Reversivo):`;
+
+        // CORRECCIÓN INTERFAZ: Renderizar las matrices inversas en el verdadero orden matemático decreciente
+        for (let paso = indiceNivel; paso >= 0; paso--) {
+            agregarNodoMatrizVisual(paso, modo);
+            if (paso > 0) agregarFlechaSeparadora();
+        }
     }
 
-    for (let paso = 0; paso <= indiceNivel; paso++) {
+    function agregarNodoMatrizVisual(paso, modoActual) {
         const mk = MATRICES[paso].K; const mi = MATRICES[paso].K_INV;
         const unidadHtml = document.createElement('div');
-        unidadHtml.className = `matrix-unit ${modo === 'cifrar' ? 'active-op' : ''}`;
+        unidadHtml.className = `matrix-unit ${modoActual === 'cifrar' ? 'active-op' : ''}`;
         unidadHtml.innerHTML = `
-            <div class="matrix-label">${modo === 'cifrar' ? `Capa ${paso+1}: K${paso+1}` : `Deshace Capa ${paso+1}: K${paso+1}⁻¹`}</div>
+            <div class="matrix-label">${modoActual === 'cifrar' ? `Capa ${paso+1}: K${paso+1}` : `Deshace Capa ${paso+1}: K${paso+1}⁻¹`}</div>
             <div class="matrix-math"><div class="matrix-cells">
-                <div class="matrix-row"><span>${modo === 'cifrar' ? mk[0][0] : mi[0][0]}</span><span>${modo === 'cifrar' ? mk[0][1] : mi[0][1]}</span></div>
-                <div class="matrix-row"><span>${modo === 'cifrar' ? mk[1][0] : mi[1][0]}</span><span>${modo === 'cifrar' ? mk[1][1] : mi[1][1]}</span></div>
+                <div class="matrix-row"><span>${modoActual === 'cifrar' ? mk[0][0] : mi[0][0]}</span><span>${modoActual === 'cifrar' ? mk[0][1] : mi[0][1]}</span></div>
+                <div class="matrix-row"><span>${modoActual === 'cifrar' ? mk[1][0] : mi[1][0]}</span><span>${modoActual === 'cifrar' ? mk[1][1] : mi[1][1]}</span></div>
             </div></div>
         `;
         cascadeContainer.appendChild(unidadHtml);
-        if (paso < indiceNivel) {
-            const flecha = document.createElement('div'); flecha.className = "cascade-arrow"; flecha.textContent = "➔"; cascadeContainer.appendChild(flecha);
-        }
+
         const itemLog = document.createElement('div'); itemLog.className = "console-item"; const tiempoStr = new Date().toTimeString().split(' ')[0];
-        itemLog.innerHTML = `<span class="console-time">[${tiempoStr}]</span> Vinculada Capa Algebraica ${paso+1} -> Matriz K: [[${mk[0]}],[${mk[1]}]] | K_INV: [[${mi[0]}],[${mi[1]}]]`;
+        itemLog.innerHTML = `<span class="console-time">[${tiempoStr}]</span> Capa Algebraica ${paso+1} mapeada en pipeline operativo.`;
         log.appendChild(itemLog);
     }
+
+    function agregarFlechaSeparadora() {
+        const flecha = document.createElement('div'); flecha.className = "cascade-arrow"; flecha.textContent = "➔"; cascadeContainer.appendChild(flecha);
+    }
+
     if (ultimaImgProcesada) ejecutarPipelineCifrado(ultimaImgProcesada);
 }
 
