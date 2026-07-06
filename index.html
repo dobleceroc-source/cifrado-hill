@@ -648,26 +648,26 @@ const MATRICES = [
     // 3. Det = 1, Det_INV = 1
     { K: [[4, 7], [1, 2]], K_INV: [[2, 249], [255, 4]] },
 
-    // 4. Det = 3, Det_INV = 171
-    { K: [[3, 2], [3, 5]], K_INV: [[9, 114], [85, 43]] },
+    // 4. Det = 9, Det_INV = 57 (CORREGIDO: -3 * 57 mod 256 = 85)
+    { K: [[3, 2], [3, 5]], K_INV: [[29, 142], [85, 171]] },
 
     // 5. Det = 5, Det_INV = 205
-    { K: [[4, 3], [1, 2]], K_INV: [[154, 25], [61, 51]] },
+    { K: [[4, 3], [1, 2]], K_INV: [[154, 153], [51, 52]] },
 
-    // 6. Det = 7, Det_INV = 111
-    { K: [[5, 2], [4, 3]], K_INV: [[77, 129], [152, 239]] },
+    // 6. Det = 7, Det_INV = 183 (CORREGIDO: Inv de 7 es 183, no 111)
+    { K: [[5, 2], [4, 3]], K_INV: [[37, 146], [36, 147]] },
 
     // 7. Det = 9, Det_INV = 57
-    { K: [[5, 1], [1, 2]], K_INV: [[114, 57], [57, 28]] },
+    { K: [[5, 1], [1, 2]], K_INV: [[114, 199], [199, 29]] },
 
-    // 8. Det = 11, Det_INV = 163
-    { K: [[4, 1], [1, 3]], K_INV: [[233, 93], [93, 54]] },
+    // 8. Det = 11, Det_INV = 163 (CORREGIDO: 4 * 163 mod 256 = 140)
+    { K: [[4, 1], [1, 3]], K_INV: [[233, 93], [93, 140]] },
 
-    // 9. CORREGIDO: Sintaxis de array interno arreglada [[79, 18], [9, 140]]
-    { K: [[5, 4], [2, 3]], K_INV: [[79, 18], [9, 140]] },
+    // 9. Det = 7, Det_INV = 183 (CORREGIDO: Matriz corregida con inversos reales)
+    { K: [[5, 4], [2, 3]], K_INV: [[37, 36], [146, 147]] },
 
-    // 10. Det = 15, Det_INV = 17
-    { K: [[6, 1], [3, 3]], K_INV: [[51, 239], [205, 102]] }
+    // 10. Det = 15, Det_INV = 239
+    { K: [[6, 1], [3, 3]], K_INV: [[205, 17], [51, 154]] }
 ];
 let ultimaImgProcesada = null;
 
@@ -687,25 +687,33 @@ function ejecutarPipelineCifrado(imgOriginal) {
 
         const canvasIn = document.createElement('canvas');
         canvasIn.width = ancho; canvasIn.height = alto;
-        const ctxIn = canvasIn.getContext('2d');
+        const ctxIn = canvasIn.getContext('2d', { willReadFrequently: true });
+        ctxIn.imageSmoothingEnabled = false;
         ctxIn.drawImage(imgOriginal, 0, 0, ancho, alto);
         
         const imgDataIn = ctxIn.getImageData(0, 0, ancho, alto);
         const pixelesIn = imgDataIn.data;
 
+// --- REEMPLAZA DESDE AQUÍ ---
         let bufferCanal = new Uint8ClampedArray(ancho * alto);
         for (let i = 0; i < bufferCanal.length; i++) {
             const idx = i * 4;
-            if (modo === 'descifrar') { 
-                bufferCanal[i] = pixelesIn[idx]; 
-            } else { 
-                bufferCanal[i] = Math.floor(0.299 * pixelesIn[idx] + 0.587 * pixelesIn[idx+1] + 0.114 * pixelesIn[idx+2]); 
+            if (modo === 'descifrar') {
+                // En descifrado leemos el valor del píxel directo sin operar fórmulas matemáticas intermedias
+                bufferCanal[i] = pixelesIn[idx];
+            } else {
+                // En cifrado convertimos a gris entero sin decimales
+                bufferCanal[i] = Math.round((pixelesIn[idx] + pixelesIn[idx+1] + pixelesIn[idx+2]) / 3);
             }
         }
 
+        // Forzar a que la previsualización de entrada sea gris puro simétrico
         for (let i = 0; i < bufferCanal.length; i++) {
             const idx = i * 4;
-            pixelesIn[idx] = bufferCanal[i]; pixelesIn[idx+1] = bufferCanal[i]; pixelesIn[idx+2] = bufferCanal[i]; pixelesIn[idx+3] = 255;
+            pixelesIn[idx] = bufferCanal[i]; 
+            pixelesIn[idx+1] = bufferCanal[i]; 
+            pixelesIn[idx+2] = bufferCanal[i]; 
+            pixelesIn[idx+3] = 255;
         }
         ctxIn.putImageData(imgDataIn, 0, 0);
 
@@ -740,6 +748,7 @@ function ejecutarPipelineCifrado(imgOriginal) {
         const canvasOut = document.createElement('canvas');
         canvasOut.width = ancho; canvasOut.height = alto;
         const ctxOut = canvasOut.getContext('2d');
+        ctxOut.imageSmoothingEnabled = false;
         const imgDataOut = ctxOut.createImageData(ancho, alto);
         const pixelesOut = imgDataOut.data;
 
